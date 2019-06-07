@@ -1,0 +1,69 @@
+{
+	"name": "vscode-typescript-exportallmodules",
+	"displayName": "TypeScript Export All Modules",
+	"description": "VSCode extension which generates an `index.ts` file with all the module exports from the current directory.",
+	"version": "0.0.1",
+  "publisher": "eliostruyf",
+	"engines": {
+		"vscode": "^1.35.0"
+	},
+	"categories": [
+		"Other"
+	],
+  "keywords": [
+    "TypeScript",
+    "export"
+  ],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com:estruyf/vscode-typescript-exportallmodules"
+	},
+	"activationEvents": [
+		"onCommand:exportall.generate"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "exportall.generate",
+				"title": "Export all modules in directory"
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "exportall.generate",
+					"when": "explorerResourceIsFolder"
+				}
+			]
+		},
+		"configuration": [
+			{
+				"type": "object",
+				"title": "Export all modules",
+				"properties": {
+					"exportall.config.exclude": {
+						"type": "string",
+						"default": ".test.,.spec.",
+						"description": "Specify which files you want to exclude for generating the `index.ts` file (comma seperated)."
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"typescript": "^3.3.1",
+		"vscode": "^1.1.28",
+		"tslint": "^5.12.1",
+		"@types/node": "^10.12.21",
+		"@types/mocha": "^2.2.42"
+	}
+}
