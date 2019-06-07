@@ -9,7 +9,7 @@ export class ExportAll {
       const excludeFiles: string | undefined = vscode.workspace.getConfiguration().get('exportall.config.exclude');
       let files = fs.readdirSync(uri.path);
       if (files && files.length > 0) {
-        files = files.filter(file => file.endsWith(".ts") && file.endsWith(".tsx") && file.toLowerCase() !== "index.ts");
+        files = files.filter(file => (file.endsWith(".ts") || file.endsWith(".tsx")) && file.toLowerCase() !== "index.ts");
         if (excludeFiles) {
           const filesToExclude = excludeFiles.split(",");
           for (const exclude of filesToExclude) {
