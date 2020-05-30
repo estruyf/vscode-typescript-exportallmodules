@@ -3,23 +3,24 @@
 	"displayName": "TypeScript Export All Modules",
 	"description": "VSCode extension which generates an `index.ts` file with all the module exports from the current directory.",
 	"version": "0.0.2",
-  "publisher": "eliostruyf",
+	"publisher": "eliostruyf",
 	"engines": {
 		"vscode": "^1.35.0"
 	},
 	"categories": [
 		"Other"
 	],
-  "keywords": [
-    "TypeScript",
-    "export"
-  ],
+	"keywords": [
+		"TypeScript",
+		"export"
+	],
 	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com:estruyf/vscode-typescript-exportallmodules"
 	},
 	"activationEvents": [
+		"*",
 		"onCommand:exportall.generate"
 	],
 	"main": "./out/extension.js",
@@ -28,12 +29,20 @@
 			{
 				"command": "exportall.generate",
 				"title": "Export all modules in directory"
+			},
+			{
+				"command": "exportall.addFolder",
+				"title": "Add listener to the folder"
 			}
 		],
 		"menus": {
 			"explorer/context": [
 				{
 					"command": "exportall.generate",
+					"when": "explorerResourceIsFolder"
+				},
+				{
+					"command": "exportall.addFolder",
 					"when": "explorerResourceIsFolder"
 				}
 			]
@@ -47,6 +56,11 @@
 						"type": "string",
 						"default": ".test.,.spec.",
 						"description": "Specify which files you want to exclude for generating the `index.ts` file (comma seperated)."
+					},
+					"exportall.config.folderListener": {
+						"type": "array",
+						"default": [],
+						"description": "Listen file creations in the specified project folders."
 					}
 				}
 			}
