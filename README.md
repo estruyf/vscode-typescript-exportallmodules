@@ -20,6 +20,14 @@ This extension allows you to manually create a module export or to set a folder 
 
 ![Export listener](./assets/listener.gif)
 
+> **Info**: When a folder listener is added, it will be visible in the `TypeScript - Export Listeners` view. By clicking on the folder names, you will automatically open the `index.ts` file.
+
+### Removing a listener
+
+Folder listeners can be removed by right-clicking on the folder name in the `TypeScript - Export Listeners` view.
+
+![Remove a folder listener](./assets/remove-listener.png)
+
 ## Configuration
 
 The configuration of the folder listeners is stored under the following setting: `exportall.config.folderListener`. This is an array of the relative folder paths in for the current workspace.
