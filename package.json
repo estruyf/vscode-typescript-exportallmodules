@@ -4,6 +4,17 @@
 	"description": "VSCode extension which generates an `index.ts` file with all the module exports from the current directory.",
 	"version": "0.1.0",
 	"publisher": "eliostruyf",
+	"galleryBanner": {
+		"color": "#011627",
+		"theme": "dark"
+	},
+	"badges": [
+		{
+			"description": "version",
+			"url": "https://img.shields.io/github/package-json/v/estruyf/vscode-typescript-exportallmodules?color=green&label=vscode-front-matter&style=flat-square",
+			"href": "https://github.com/estruyf/vscode-typescript-exportallmodules"
+		}
+	],
 	"engines": {
 		"vscode": "^1.35.0"
 	},
@@ -28,22 +39,44 @@
 		"commands": [
 			{
 				"command": "exportall.generate",
-				"title": "Export all modules in directory"
+				"title": "TypeScript: Export all modules"
 			},
 			{
 				"command": "exportall.addFolder",
-				"title": "Add listener to the folder"
+				"title": "TypeScript: Add listener to the folder"
+			},
+			{
+				"command": "exportall.removeFolder",
+				"title": "Remove listener from the folder"
+			},
+			{
+				"command": "exportall.refreshView",
+				"title": "Refresh"
 			}
 		],
 		"menus": {
 			"explorer/context": [
 				{
 					"command": "exportall.generate",
-					"when": "explorerResourceIsFolder"
+					"when": "explorerResourceIsFolder",
+					"group": "TypeScript@1"
 				},
 				{
 					"command": "exportall.addFolder",
-					"when": "explorerResourceIsFolder"
+					"when": "explorerResourceIsFolder",
+					"group": "TypeScript@2"
+				}
+			],
+			"view/title": [
+				{
+					"command": "exportall.refreshView",
+					"when": "view == exportall.view"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "exportall.removeFolder",
+					"when": "view == exportall.view"
 				}
 			]
 		},
@@ -64,6 +97,20 @@
 					}
 				}
 			}
+		],
+		"views": {
+			"explorer": [
+				{
+					"id": "exportall.view",
+					"name": "TypeScript - Export Listeners"
+				}
+			]
+		},
+		"viewsWelcome": [
+			{
+				"view": "exportall.view",
+				"contents": "There are currently no TypeScript folder listeners"
+			}
 		]
 	},
 	"scripts": {
@@ -74,10 +121,10 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28",
-		"tslint": "^5.12.1",
-		"@types/node": "^10.12.21",
-		"@types/mocha": "^2.2.42"
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^10.17.24",
+		"tslint": "^5.20.1",
+		"typescript": "^3.9.3",
+		"vscode": "^1.1.37"
 	}
 }

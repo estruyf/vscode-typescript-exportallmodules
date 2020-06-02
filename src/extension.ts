@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import { ExportAll } from './commands/ExportAll';
-
-const CONFIG_KEY = 'exportall';
-const CONFIG_FOLDERS = 'config.folderListener';
+import { FolderListener } from './commands';
+import { ExportProvider, ExportFolder } from './providers';
 
 export function activate(context: vscode.ExtensionContext) {
-	let disposable = vscode.commands.registerCommand('exportall.generate', async (uri: vscode.Uri) => {
+
+	const generate = vscode.commands.registerCommand('exportall.generate', async (uri: vscode.Uri) => {
 		if (uri) {
 			await ExportAll.start(uri);
 		} else {
@@ -13,45 +13,48 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	let addProjectListener = vscode.commands.registerCommand('exportall.addFolder', async (uri: vscode.Uri) => {
+	const addListener = vscode.commands.registerCommand('exportall.addFolder', async (uri: vscode.Uri) => {
 		if (uri) {
-			let config = vscode.workspace.getConfiguration(CONFIG_KEY)
-			let options: string[] | undefined = config.get(CONFIG_FOLDERS);
-			if (!options) {
-				options = [];
-			}
-			options.push(uri.path);
-			options = [...new Set(options)];
-			config.update(CONFIG_FOLDERS, options);
-			startListener();
+			await FolderListener.add(uri);
 		} else {
-			vscode.window.showErrorMessage('No folder path selected');
+			vscode.window.showErrorMessage('There was no folder path provided');
 		}
 	});
 
-	startListener();
+	const removeListener = vscode.commands.registerCommand('exportall.removeFolder', async (exportFolder: ExportFolder) => {
+		if (exportFolder) {
+			await FolderListener.remove(exportFolder);
+		} else {
+			vscode.window.showErrorMessage('There was no folder path provided');
+		}
+	});
 
-	context.subscriptions.push(disposable);
-	context.subscriptions.push(addProjectListener);
+	const open = vscode.commands.registerCommand('exportall.open', async function (uri: vscode.Uri) {
+		await vscode.commands.executeCommand('vscode.openFolder', uri);
+	});
+
+	FolderListener.startListener();
+
+	// Register view
+	const exportView = new ExportProvider();
+	vscode.window.createTreeView('exportall.view', { treeDataProvider: exportView });
+	// Register view refresh
+	const refresh = vscode.commands.registerCommand('exportall.refreshView', () => exportView.refresh());
+	// Register the listener when configuration is changed
+	vscode.workspace.onDidChangeConfiguration(() => exportView.refresh());
+
+	context.subscriptions.push(
+		generate,
+		addListener,
+		removeListener,
+		refresh,
+		open
+	);
 
   console.log('TypeScript Export All is now active!');
 }
 
-const startListener = () => {
-	const folderListener: string[] | undefined = vscode.workspace.getConfiguration(CONFIG_KEY).get(CONFIG_FOLDERS);
-	if (folderListener) {
-		for (const folder of folderListener) {
-			let watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(folder, "*"));
-			const folderUri = vscode.Uri.file(folder);
-			watcher.onDidDelete(async (uri: vscode.Uri) => {
-				await ExportAll.start(folderUri);
-			});
-			watcher.onDidCreate(async (uri: vscode.Uri) => {
-				await ExportAll.start(folderUri);
-			});
-		}
-	}
-}
+
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
