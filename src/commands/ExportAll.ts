@@ -7,7 +7,7 @@ export class ExportAll {
   public static async start(uri: vscode.Uri) {
     try {
       const excludeFiles: string | undefined = vscode.workspace.getConfiguration().get('exportall.config.exclude');
-      let files = fs.readdirSync(uri.path);
+      let files = fs.readdirSync(uri.fsPath);
       if (files && files.length > 0) {
         files = files.filter(file => (file.endsWith(".ts") || file.endsWith(".tsx")) && file.toLowerCase() !== "index.ts");
         if (excludeFiles) {
@@ -26,7 +26,7 @@ export class ExportAll {
         });
 
         if (output && output.length > 0) {
-          fs.writeFileSync(path.join(uri.path, "index.ts"), output.join(""));
+          fs.writeFileSync(path.join(uri.fsPath, "index.ts"), output.join(""));
           vscode.window.showInformationMessage("Exported all files");
         }
       }

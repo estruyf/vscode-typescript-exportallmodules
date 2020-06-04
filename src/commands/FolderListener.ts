@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as os from 'os';
 import { ExportAll } from '.';
 import { CONFIG_KEY, CONFIG_FOLDERS } from '../constants';
 import { ExportFolder } from '../providers';
@@ -12,7 +13,7 @@ export class FolderListener {
    * @param uri 
    */
   public static async add(uri: vscode.Uri) {
-    const relativePath = this.getRelativeFolderPath(uri.path);
+    let relativePath = this.getRelativeFolderPath(uri.fsPath);
     let options = this.getFolders();
     options.push(relativePath);
     options = [...new Set(options)];
@@ -56,7 +57,7 @@ export class FolderListener {
         watcher.onDidDelete(async (uri: vscode.Uri) => this.listener(folderUri, uri));
         watcher.onDidCreate(async (uri: vscode.Uri) => this.listener(folderUri, uri));
         watcher.onDidChange(async (uri: vscode.Uri) => this.listener(folderUri, uri));
-        this.watchers[folderUri.path] = watcher;
+        this.watchers[folderUri.fsPath] = watcher;
       }
     }
   }
@@ -105,7 +106,7 @@ export class FolderListener {
    * @param uri 
    */
   private static isIndexFile(uri: vscode.Uri) {
-    return uri.path.toLowerCase().endsWith("index.ts");
+    return uri.fsPath.toLowerCase().endsWith("index.ts");
   }
 
   /**
@@ -114,6 +115,10 @@ export class FolderListener {
    */
   private static getRelativeFolderPath(value: string): string {
     const wsFolder =  vscode.workspace.rootPath || "";
-    return value.replace(wsFolder, "");
+    let relativePath = value.replace(wsFolder, "");
+    if (os.platform().startsWith('win')) {
+      relativePath = relativePath.replace(/\\/g, '/');
+    }
+    return relativePath;
   }
 }

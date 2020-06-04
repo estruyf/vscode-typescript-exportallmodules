@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as os from 'os';
 import { CONFIG_KEY, CONFIG_FOLDERS } from '../constants';
 import { FolderListener, ExportAll } from '../commands';
+import { pathResolve } from '../helpers/util';
 
 export class ExportFolder extends vscode.TreeItem {
   
@@ -46,7 +48,11 @@ export class ExportProvider implements vscode.TreeDataProvider<ExportFolder> {
           await ExportAll.start(folderUri); 
         }
 
-        const fileUri = vscode.Uri.parse(indexPath);
+        // const fileUri = vscode.Uri.parse(indexPath);
+        let fileUri = vscode.Uri.parse(`file://${pathResolve(indexPath)}`)
+        if (os.platform().startsWith('win')) {
+          fileUri = vscode.Uri.parse(`file:///${pathResolve(indexPath)}`.replace(/\\/g, '/'));
+        }
         let command: vscode.Command = {
           command: 'exportall.open',
           title: '',
@@ -54,9 +60,9 @@ export class ExportProvider implements vscode.TreeDataProvider<ExportFolder> {
         };
         
         const config = {
-          label: path.basename(folderUri.path),
+          label: path.basename(folderUri.fsPath),
           collapsibleState: vscode.TreeItemCollapsibleState.None,
-          value: folderUri.path,
+          value: absPath,
           uri: folderUri,
           command
         };
