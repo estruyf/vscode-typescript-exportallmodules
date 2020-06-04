@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { CONFIG_KEY, CONFIG_FOLDERS } from '../constants';
 import { FolderListener, ExportAll } from '../commands';
-import { pathResolve } from '../helpers/util';
+import { pathResolve } from '../helpers';
 
 export class ExportFolder extends vscode.TreeItem {
   
