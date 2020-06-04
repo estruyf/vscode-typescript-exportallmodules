@@ -1,9 +1,9 @@
 # Change Log
 
-All notable changes to the "vscode-typescript-exportall" extension will be documented in this file.
+## [1.0.1] 04-06-2020
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- Fix issues for the Windows file system
 
-## [Unreleased]
+## [1.0.0] 02-06-2020
 
-- Initial release
+- Official release
