@@ -1,11 +1,20 @@
 import * as vscode from 'vscode';
 import { ExportAll } from './commands/ExportAll';
-import { FolderListener } from './commands';
+import { FolderListener, ExcludeCommand } from './commands';
 import { ExportProvider, ExportFolder } from './providers';
+import { EXTENSION_KEY, COMMAND_KEYS, getCommandName } from './constants';
 
+/**
+ * TODO:
+ * - add the excluded files & folders to the view
+ * - add exclude file command
+ * - add exclude folder command
+ * - documentation
+ * @param context 
+ */
 export function activate(context: vscode.ExtensionContext) {
 
-	const generate = vscode.commands.registerCommand('exportall.generate', async (uri: vscode.Uri) => {
+	const generate = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.Generate), async (uri: vscode.Uri) => {
 		if (uri) {
 			await ExportAll.start(uri);
 		} else {
@@ -13,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	const addListener = vscode.commands.registerCommand('exportall.addFolder', async (uri: vscode.Uri) => {
+	const addListener = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.AddFolder), async (uri: vscode.Uri) => {
 		if (uri) {
 			await FolderListener.add(uri);
 		} else {
@@ -21,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	const removeListener = vscode.commands.registerCommand('exportall.removeFolder', async (exportFolder: ExportFolder) => {
+	const removeListener = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.RemoveFolder), async (exportFolder: ExportFolder) => {
 		if (exportFolder) {
 			await FolderListener.remove(exportFolder);
 		} else {
@@ -29,7 +38,31 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	const open = vscode.commands.registerCommand('exportall.open', async function (uri: vscode.Uri) {
+	const excludeFile = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.ExcludeFile), async (uri: vscode.Uri) => {
+		if (uri) {
+			await ExcludeCommand.add(uri);
+		} else {
+			vscode.window.showErrorMessage('There was no file path provided');
+		}
+	});
+
+	const excludeFolder = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.ExcludeFolder), async (uri: vscode.Uri) => {
+		if (uri) {
+			await ExcludeCommand.add(uri);
+		} else {
+			vscode.window.showErrorMessage('There was no folder path provided');
+		}
+	});
+
+	const includeFolderFile = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.Include), async (exportFolder: ExportFolder) => {
+		if (exportFolder) {
+			await ExcludeCommand.remove(exportFolder);
+		} else {
+			vscode.window.showErrorMessage('There was no folder/file path provided');
+		}
+	});
+
+	const open = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.Open), async function (uri: vscode.Uri) {
 		await vscode.commands.executeCommand('vscode.openFolder', uri);
 	});
 
@@ -37,9 +70,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register view
 	const exportView = new ExportProvider();
-	vscode.window.createTreeView('exportall.view', { treeDataProvider: exportView });
+	vscode.window.createTreeView(`${EXTENSION_KEY}.view`, { treeDataProvider: exportView });
 	// Register view refresh
-	const refresh = vscode.commands.registerCommand('exportall.refreshView', () => exportView.refresh());
+	const refresh = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.RefreshView), () => exportView.refresh());
 	// Register the listener when configuration is changed
 	vscode.workspace.onDidChangeConfiguration(() => exportView.refresh());
 
@@ -48,7 +81,10 @@ export function activate(context: vscode.ExtensionContext) {
 		addListener,
 		removeListener,
 		refresh,
-		open
+		open,
+		excludeFile,
+		excludeFolder,
+		includeFolderFile
 	);
 
   console.log('TypeScript Export All is now active!');

@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as os from 'os';
 import { ExportAll } from '.';
-import { CONFIG_KEY, CONFIG_FOLDERS } from '../constants';
+import { EXTENSION_KEY, CONFIG_FOLDERS } from '../constants';
 import { ExportFolder } from '../providers';
+import { getRelativeFolderPath, getAbsoluteFolderPath } from '../helpers';
 
 export class FolderListener {
   private static watchers: { [path: string]: vscode.FileSystemWatcher } = {};
@@ -13,11 +13,11 @@ export class FolderListener {
    * @param uri 
    */
   public static async add(uri: vscode.Uri) {
-    let relativePath = this.getRelativeFolderPath(uri.fsPath);
+    let relativePath = getRelativeFolderPath(uri.fsPath);
     let options = this.getFolders();
     options.push(relativePath);
     options = [...new Set(options)];
-    this.updateFolders(options);
+    await this.updateFolders(options);
     this.startListener();
   }
   
@@ -26,19 +26,21 @@ export class FolderListener {
    * @param uri 
    */
   public static async remove(exportFolder: ExportFolder) {
-    const relativePath = this.getRelativeFolderPath(exportFolder.value);
-    let options = this.getFolders();
-    options = options.filter(p => p !== relativePath);
-    options = [...new Set(options)];
-    this.updateFolders(options);
-    this.startListener();
+    if (exportFolder.value) {
+      const relativePath = getRelativeFolderPath(exportFolder.value);
+      let options = this.getFolders();
+      options = options.filter(p => p !== relativePath);
+      options = [...new Set(options)];
+      await this.updateFolders(options);
+      this.startListener();
+    }
   }
 
   /**
    * Start the listener
    */
   public static async startListener() {
-    const folderListener: string[] | undefined = vscode.workspace.getConfiguration(CONFIG_KEY).get(CONFIG_FOLDERS);
+    const folderListener: string[] | undefined = vscode.workspace.getConfiguration(EXTENSION_KEY).get(CONFIG_FOLDERS);
 
     // Dispose all the current watchers
     const paths = Object.keys(this.watchers);
@@ -51,7 +53,7 @@ export class FolderListener {
     // Recreate all the watchers
     if (folderListener) {
       for (const folder of folderListener) {
-        const absFolder = this.getAbsoluteFolderPath(folder);
+        const absFolder = getAbsoluteFolderPath(folder);
         const folderUri = vscode.Uri.parse(absFolder);
         let watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(absFolder, "*"));
         watcher.onDidDelete(async (uri: vscode.Uri) => this.listener(folderUri, uri));
@@ -62,14 +64,7 @@ export class FolderListener {
     }
   }
 
-  /**
-   * Retrieve the absolute folder path
-   * @param value 
-   */
-  public static getAbsoluteFolderPath(value: string): string {
-    const wsFolder = vscode.workspace.rootPath || "";
-    return path.join(wsFolder, value);
-  }
+  
 
   /**
    * Listener logic
@@ -85,7 +80,7 @@ export class FolderListener {
    * Get the current set folders
    */
   private static getFolders() {
-    let config = vscode.workspace.getConfiguration(CONFIG_KEY);
+    let config = vscode.workspace.getConfiguration(EXTENSION_KEY);
     let options: string[] | undefined = config.get(CONFIG_FOLDERS);
     if (!options) {
       options = [];
@@ -96,9 +91,9 @@ export class FolderListener {
   /**
    * Update the folder settings
    */
-  private static updateFolders(options: string[]) {
-    let config = vscode.workspace.getConfiguration(CONFIG_KEY);
-    config.update(CONFIG_FOLDERS, options);
+  private static async updateFolders(options: string[]) {
+    let config = vscode.workspace.getConfiguration(EXTENSION_KEY);
+    await config.update(CONFIG_FOLDERS, options);
   }
 
   /**
@@ -107,18 +102,5 @@ export class FolderListener {
    */
   private static isIndexFile(uri: vscode.Uri) {
     return uri.fsPath.toLowerCase().endsWith("index.ts");
-  }
-
-  /**
-   * Retrieve the relative folder path
-   * @param value 
-   */
-  private static getRelativeFolderPath(value: string): string {
-    const wsFolder =  vscode.workspace.rootPath || "";
-    let relativePath = value.replace(wsFolder, "");
-    if (os.platform().startsWith('win')) {
-      relativePath = relativePath.replace(/\\/g, '/');
-    }
-    return relativePath;
   }
 }
