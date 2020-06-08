@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const generate = vscode.commands.registerCommand(getCommandName(COMMAND_KEYS.Generate), async (uri: vscode.Uri) => {
 		if (uri) {
-			await ExportAll.start(uri);
+			await ExportAll.start(uri, false);
 		} else {
 			vscode.window.showErrorMessage('No folder path selected');
 		}

@@ -6,7 +6,7 @@ import { getRelativeFolderPath } from '../helpers';
 
 export class ExportAll {
   
-  public static async start(uri: vscode.Uri) {
+  public static async start(uri: vscode.Uri, runSilent: boolean = true) {
     try {
       const excludeFiles: string | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_EXCLUDE));
       const excludeRel: string | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_RELATIVE_EXCLUDE));
@@ -83,7 +83,9 @@ export class ExportAll {
 
         if (output && output.length > 0) {
           fs.writeFileSync(path.join(uri.fsPath, "index.ts"), output.join(""));
-          vscode.window.showInformationMessage("Exported all files");
+          if (!runSilent) {
+            vscode.window.showInformationMessage("TypeScript: Exported all files");
+          }
         }
       }
     } catch (e) {
