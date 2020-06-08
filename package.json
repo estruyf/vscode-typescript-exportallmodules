@@ -135,7 +135,7 @@
 					"exportall.config.folderListener": {
 						"type": "array",
 						"default": [],
-						"description": "Listen file creations in the specified project folders."
+						"description": "Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder."
 					}
 				}
 			}
