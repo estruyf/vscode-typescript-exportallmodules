@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.0.1] 08-06-2020
+
+- Fixed merge
+
 ## [2.0.0] 08-06-2020
 
 - Added the functionality to export options which contain a `index.ts` file
