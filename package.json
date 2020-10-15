@@ -1,7 +1,7 @@
 {
 	"name": "vscode-typescript-exportallmodules",
-	"displayName": "TypeScript Export All Modules",
-	"description": "VSCode extension which generates an `index.ts` file with all the module exports from the current directory.",
+	"displayName": "TypeScript Barrel Generator",
+	"description": "VSCode extension which generates a barrel `index.ts` file with all the module exports from the current directory.",
 	"version": "2.0.1",
 	"icon": "assets/export-all.png",
 	"publisher": "eliostruyf",
@@ -24,7 +24,8 @@
 	],
 	"keywords": [
 		"TypeScript",
-		"export"
+		"export",
+		"barrel"
 	],
 	"license": "MIT",
 	"repository": {

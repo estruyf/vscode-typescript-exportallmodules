@@ -1,4 +1,4 @@
-# TypeScript Export All Modules 
+# TypeScript Barrel Generator
 
 [![Version](https://vsmarketplacebadge.apphb.com/version/eliostruyf.vscode-typescript-exportallmodules.svg)](https://marketplace.visualstudio.com/items?itemName=eliostruyf.vscode-typescript-exportallmodules)
 &nbsp;&nbsp;
@@ -6,13 +6,13 @@
 &nbsp;&nbsp;
 [![Rating](https://vsmarketplacebadge.apphb.com/rating/eliostruyf.vscode-typescript-exportallmodules.svg)](https://marketplace.visualstudio.com/items?itemName=eliostruyf.vscode-typescript-exportallmodules&ssr=false#review-details)
 
-Working with TypeScript? Want to make your TypeScript imports cleaner? Use this extension to easily export all modules from a specific directory via a `index.ts` file.
+Working with TypeScript? Want to make your TypeScript imports cleaner? Use this extension to easily export all modules to a barrel `index.ts` file.
 
 ## Functionalities
 
-The extension allows you to manually or automatically export the modules. For the automatic way, you first have to create a listener for the folder for which you want to create the automated export. 
+The extension allows you to manually or automatically export the modules to a barrel file. For the automatic way, you first have to create a listener for the folder for which you want to create the automated export. 
 
-In both the manual and automatic way, a `index.ts` file will be created with a reference to all the folder/files in the current directory.
+In both the manual and automatic way, an `index.ts` file will be created with a reference to all the folder/files in the current directory.
 
 > **Info**: If there are folders/files you want to get excluded from the export, you can do this by right-clicking on the folder/file and clicking on the `TypeScript: Exclude folder/file from export`.
 

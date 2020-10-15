@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.1.0] 15-10-2020
+
+- Name change to TypeScript Barrel Generator
+
 ## [2.0.1] 08-06-2020
 
 - Fixed merge
