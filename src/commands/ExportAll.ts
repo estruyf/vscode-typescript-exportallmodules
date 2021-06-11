@@ -82,7 +82,19 @@ export class ExportAll {
         });
 
         if (output && output.length > 0) {
-          fs.writeFileSync(path.join(uri.fsPath, "index.ts"), output.join(""));
+          const fileUri = vscode.Uri.file(path.join(uri.fsPath, "index.ts"));
+          const document = await vscode.workspace.openTextDocument(fileUri);
+          const documentRange = new vscode.Range(
+            document.lineAt(0).range.start,
+            document.lineAt(document.lineCount - 1).range.end
+          );
+
+          const edit = new vscode.WorkspaceEdit();
+          edit.replace(fileUri, documentRange, output.join(""));
+          await vscode.workspace.applyEdit(edit);
+
+          await document.save();
+
           if (!runSilent) {
             vscode.window.showInformationMessage("TypeScript: Exported all files");
           }
