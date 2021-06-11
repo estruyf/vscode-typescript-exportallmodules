@@ -18,6 +18,11 @@
 
 - Fix issues for the Windows file system
 
+## [2.2.0] 11-06-2021
+
+- Added default save functionality from VS Code (Thanks to [yamaimo](https://github.com/yarnaimo))
+- [#3](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/3): Add an option about adding semis automatically
+
 ## [1.0.0] 02-06-2020
 
 - Official release

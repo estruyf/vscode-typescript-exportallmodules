@@ -137,6 +137,11 @@
 						"type": "array",
 						"default": [],
 						"description": "Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder."
+					},
+					"exportall.config.semis": {
+						"type": "boolean",
+						"default": true,
+						"description": "Specify if you want to enable/disable the usage of semis in the barrel file."
 					}
 				}
 			}

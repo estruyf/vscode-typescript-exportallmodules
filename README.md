@@ -56,6 +56,7 @@ The extension makes use of the following settings:
 | `exportall.config.exclude` | Specify which files you want to exclude the `index.ts` file. Works on the whole filename or part of the filename. | string[] | `['.test.', '.spec.']` |
 | `exportall.config.folderListener` | Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder. | string[] | `[]` |
 | `exportall.config.relExclusion` | Specify the relative folder/file paths to exclude from the export. | string[] | `[]` |
+| `exportall.config.semis` | Specify if you want to enable/disable the usage of semis in the barrel file. | boolean | `true` |
 
 ![config setting](./assets/config.png)
 
