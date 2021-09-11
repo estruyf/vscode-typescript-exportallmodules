@@ -33,10 +33,13 @@ export class ExportAll {
           if (includeFolders) {
             // Only allow folder which contain an index file
             if (fs.lstatSync(absPath).isDirectory()) {
-              const indexPath = path.join(absPath, '/index.ts');
-              if (fs.existsSync(indexPath)) {
-                relPath = getRelativeFolderPath(absPath);
-                include = true;
+              for (const indexFile of ['index.ts', 'index.tsx']) {
+                const indexPath = path.join(absPath, indexFile);
+                if (fs.existsSync(indexPath)) {
+                  relPath = getRelativeFolderPath(absPath);
+                  include = true;
+                  break;
+                }
               }
             }
           }
