@@ -142,6 +142,11 @@
 						"type": "boolean",
 						"default": true,
 						"description": "Specify if you want to enable/disable the usage of semis in the barrel file."
+					},
+					"exportall.config.quote": {
+						"type": "string",
+						"default": "'",
+						"description": "Specify the character that you want to use as the quoting character; typically ' or \""
 					}
 				}
 			}

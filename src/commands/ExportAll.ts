@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS } from '../constants';
+import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE } from '../constants';
 import { getRelativeFolderPath } from '../helpers';
 
 export class ExportAll {
@@ -12,6 +12,7 @@ export class ExportAll {
       const excludeRel: string | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_RELATIVE_EXCLUDE));
       const includeFolders: boolean | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_INCLUDE_FOLDERS));
       const semis: boolean | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_SEMIS));
+      const quote: "\"" | "'"  = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_QUOTE)) ?? "'";
 
       const folderPath = uri.fsPath;
       const files = fs.readdirSync(folderPath);
@@ -79,7 +80,7 @@ export class ExportAll {
       if (filesToExport && filesToExport.length > 0) {
         let output = filesToExport.map((file) => {
           const fileWithoutExtension = path.parse(file).name;
-          return `export * from './${fileWithoutExtension}'${semis ? ';' : ''}\n`;
+          return `export * from ${quote}./${fileWithoutExtension}${quote}${semis ? ';' : ''}\n`;
         });
 
         if (output && output.length > 0) {

@@ -4,6 +4,7 @@ export const CONFIG_EXCLUDE = 'config.exclude';
 export const CONFIG_RELATIVE_EXCLUDE = 'config.relExclusion';
 export const CONFIG_INCLUDE_FOLDERS = 'config.includeFoldersToExport';
 export const CONFIG_SEMIS = 'config.semis';
+export const CONFIG_QUOTE = 'config.quote';
 
 export const COMMAND_KEYS = {
   Generate: "generate",
