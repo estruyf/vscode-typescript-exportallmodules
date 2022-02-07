@@ -2,7 +2,7 @@
 	"name": "vscode-typescript-exportallmodules",
 	"displayName": "TypeScript Barrel Generator",
 	"description": "VSCode extension which generates a barrel `index.ts` file with all the module exports from the current directory.",
-	"version": "2.3.0",
+	"version": "2.3.1",
 	"icon": "assets/export-all.png",
 	"publisher": "eliostruyf",
 	"galleryBanner": {
@@ -15,11 +15,11 @@
 			"url": "https://img.shields.io/github/package-json/v/estruyf/vscode-typescript-exportallmodules?color=green&label=vscode-front-matter&style=flat-square",
 			"href": "https://github.com/estruyf/vscode-typescript-exportallmodules"
 		},
-    {
-      "description": "Buy me a coffee",
-      "url": "https://img.shields.io/badge/Buy%20me%20a%20coffee-€%203-blue?logo=buy-me-a-coffee&style=flat-square",
-      "href": "https://www.buymeacoffee.com/zMeFRy9"
-    }
+		{
+			"description": "Buy me a coffee",
+			"url": "https://img.shields.io/badge/Buy%20me%20a%20coffee-€%203-blue?logo=buy-me-a-coffee&style=flat-square",
+			"href": "https://www.buymeacoffee.com/zMeFRy9"
+		}
 	],
 	"engines": {
 		"vscode": "^1.35.0"
