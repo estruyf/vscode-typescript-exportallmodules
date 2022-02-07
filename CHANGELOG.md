@@ -3,8 +3,9 @@
 ## [2.3.0] 07-02-2022
 
 - [#4](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/4): Fix file and folder parsing on Windows
-- [#8](https://github.com/estruyf/vscode-typescript-exportallmodules/pull/8): Exporting folders that contain a `index.tsx` file
-- [#9](https://github.com/estruyf/vscode-typescript-exportallmodules/pull/9): Ability to specify which type of quotes to use when exporting
+- [#8](https://github.com/estruyf/vscode-typescript-exportallmodules/pull/8): Exporting folders that contain a `index.tsx` file. Thanks to [
+Robin Blomberg](https://github.com/RobinBlomberg).
+- [#9](https://github.com/estruyf/vscode-typescript-exportallmodules/pull/9): Ability to specify which type of quotes to use when exporting. Thanks to [rveldpaus](https://github.com/rveldpaus).
 
 ## [2.2.0] 11-06-2021
 
