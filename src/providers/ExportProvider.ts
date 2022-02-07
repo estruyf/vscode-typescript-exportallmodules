@@ -89,7 +89,7 @@ export class ExportProvider implements vscode.TreeDataProvider<ExportFolder> {
         // Generate the path for the open command
         const filePath = isFolder ? pathResolve(indexPath) : absPath;
         if (!filePath) {
-          return;
+          return [];
         }
         let fileUri = vscode.Uri.file(filePath);
 
