@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.3.1] 07-02-2022
+
+- [#4](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/4): Fix file path in `file` parsing
+
 ## [2.3.0] 07-02-2022
 
 - [#4](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/4): Fix file and folder parsing on Windows
