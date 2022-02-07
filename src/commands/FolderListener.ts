@@ -54,7 +54,7 @@ export class FolderListener {
     if (folderListener) {
       for (const folder of folderListener) {
         const absFolder = getAbsoluteFolderPath(folder);
-        const folderUri = vscode.Uri.parse(absFolder);
+        const folderUri = vscode.Uri.file(absFolder);
         let watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(absFolder, "*"));
         watcher.onDidDelete(async (uri: vscode.Uri) => this.listener(folderUri, uri));
         watcher.onDidCreate(async (uri: vscode.Uri) => this.listener(folderUri, uri));

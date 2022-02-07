@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { getRelativeFolderPath, getAbsoluteFolderPath } from '../helpers';
-import { FolderListener } from './FolderListener';
 import { EXTENSION_KEY, CONFIG_RELATIVE_EXCLUDE, CONFIG_FOLDERS } from '../constants';
 import { ExportFolder } from '../providers';
 import { ExportAll } from '.';
@@ -63,7 +62,7 @@ export class ExcludeCommand {
     if (folderListener) {
       for (const folder of folderListener) {
         const absFolder = getAbsoluteFolderPath(folder);
-        const folderUri = vscode.Uri.parse(absFolder);
+        const folderUri = vscode.Uri.file(absFolder);
         ExportAll.start(folderUri);
       }
     }

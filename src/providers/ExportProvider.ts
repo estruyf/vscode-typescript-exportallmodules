@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as os from 'os';
 import { EXTENSION_KEY, CONFIG_FOLDERS, CONFIG_RELATIVE_EXCLUDE } from '../constants';
-import { FolderListener, ExportAll } from '../commands';
+import { ExportAll } from '../commands';
 import { pathResolve, getAbsoluteFolderPath } from '../helpers';
 
 export class ExportFolder extends vscode.TreeItem {
@@ -16,7 +15,7 @@ export class ExportFolder extends vscode.TreeItem {
     }
 
     if (value) {
-      this.resourceUri = uri ? uri : vscode.Uri.parse(value);
+      this.resourceUri = uri ? uri : vscode.Uri.file(value);
       this.tooltip = value;
     }
   }
@@ -77,7 +76,7 @@ export class ExportProvider implements vscode.TreeDataProvider<ExportFolder> {
       try {
         const absPath = getAbsoluteFolderPath(opt);
         const isFolder = fs.lstatSync(absPath).isDirectory();
-        const uri = vscode.Uri.parse(absPath);
+        const uri = vscode.Uri.file(absPath);
         const indexPath = path.join(absPath, 'index.ts');
 
         // When no `index.ts` file exists, create one
@@ -89,10 +88,7 @@ export class ExportProvider implements vscode.TreeDataProvider<ExportFolder> {
 
         // Generate the path for the open command
         const filePath = isFolder ? pathResolve(indexPath) : absPath;
-        let fileUri = vscode.Uri.parse(`file://${filePath}`);
-        if (os.platform().startsWith('win')) {
-          fileUri = vscode.Uri.parse(`file:///${filePath}`.replace(/\\/g, '/'));
-        }
+        let fileUri = vscode.Uri.file(`file://${filePath}`);
 
         // Create the open command
         let command: vscode.Command = {
