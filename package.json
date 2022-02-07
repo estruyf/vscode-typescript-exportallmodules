@@ -14,7 +14,12 @@
 			"description": "version",
 			"url": "https://img.shields.io/github/package-json/v/estruyf/vscode-typescript-exportallmodules?color=green&label=vscode-front-matter&style=flat-square",
 			"href": "https://github.com/estruyf/vscode-typescript-exportallmodules"
-		}
+		},
+    {
+      "description": "Buy me a coffee",
+      "url": "https://img.shields.io/badge/Buy%20me%20a%20coffee-€%203-blue?logo=buy-me-a-coffee&style=flat-square",
+      "href": "https://www.buymeacoffee.com/zMeFRy9"
+    }
 	],
 	"engines": {
 		"vscode": "^1.35.0"
@@ -146,6 +151,14 @@
 					"exportall.config.quote": {
 						"type": "string",
 						"default": "'",
+						"enum": [
+							"'",
+							"\""
+						],
+						"enumDescriptions": [
+							"Single quote",
+							"Double quote"
+						],
 						"description": "Specify the character that you want to use as the quoting character; typically ' or \""
 					}
 				}
