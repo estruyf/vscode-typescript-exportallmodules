@@ -35,7 +35,7 @@ export class ExportAll {
           if (includeFolders) {
             // Only allow folder which contain an index file
             if (fs.lstatSync(absPath).isDirectory()) {
-              for (const indexFile of ['index.ts', 'index.tsx']) {
+              for (const indexFile of this.barrelFiles) {
                 const indexPath = path.join(absPath, indexFile);
                 if (fs.existsSync(indexPath)) {
                   relPath = getRelativeFolderPath(absPath);
