@@ -1,8 +1,9 @@
 # Change Log
 
-## [2.1.1] 07-02-2022
+## [2.2.0] 07-02-2022
 
 - [#4](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/4): Fix file and folder parsing on Windows
+- [#9](https://github.com/estruyf/vscode-typescript-exportallmodules/pull/9): Ability to specify which type of quotes to use when exporting
 
 ## [2.1.0] 15-10-2020
 
