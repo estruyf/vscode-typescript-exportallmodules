@@ -5,6 +5,7 @@ import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE
 import { getRelativeFolderPath } from '../helpers';
 
 export class ExportAll {
+  public static barrelFiles = ["index.ts", "index.tsx"];
   
   public static async start(uri: vscode.Uri, runSilent: boolean = true) {
     try {
@@ -25,7 +26,7 @@ export class ExportAll {
           let relPath = file;
 
           // Include all TS files except for the index
-          if ((file.endsWith(".ts") || file.endsWith(".tsx")) && file.toLowerCase() !== "index.ts") {
+          if ((file.endsWith(".ts") || file.endsWith(".tsx")) && this.barrelFiles.indexOf(file.toLowerCase()) === -1) {
             relPath = getRelativeFolderPath(absPath);
             include = true;
           }
