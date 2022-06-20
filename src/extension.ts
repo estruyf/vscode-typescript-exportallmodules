@@ -2,7 +2,8 @@ import * as vscode from 'vscode';
 import { ExportAll } from './commands/ExportAll';
 import { FolderListener, ExcludeCommand } from './commands';
 import { ExportProvider, ExportFolder } from './providers';
-import { EXTENSION_KEY, COMMAND_KEYS, getCommandName } from './constants';
+import { EXTENSION_KEY, COMMAND_KEYS, getCommandName, EXTENSION_NAME } from './constants';
+import { Logger } from './helpers/logger';
 
 /**
  * TODO:
@@ -18,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (uri) {
 			await ExportAll.start(uri, false);
 		} else {
-			vscode.window.showErrorMessage('No folder path selected');
+			vscode.window.showErrorMessage(`${EXTENSION_NAME}: No folder path selected`);
 		}
 	});
 
@@ -26,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (uri) {
 			await FolderListener.add(uri);
 		} else {
-			vscode.window.showErrorMessage('There was no folder path provided');
+			vscode.window.showErrorMessage(`${EXTENSION_NAME}: There was no folder path provided`);
 		}
 	});
 
@@ -34,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (exportFolder) {
 			await FolderListener.remove(exportFolder);
 		} else {
-			vscode.window.showErrorMessage('There was no folder path provided');
+			vscode.window.showErrorMessage(`${EXTENSION_NAME}: There was no folder path provided`);
 		}
 	});
 
@@ -42,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (uri) {
 			await ExcludeCommand.add(uri);
 		} else {
-			vscode.window.showErrorMessage('There was no file path provided');
+			vscode.window.showErrorMessage(`${EXTENSION_NAME}: There was no file path provided`);
 		}
 	});
 
@@ -50,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (uri) {
 			await ExcludeCommand.add(uri);
 		} else {
-			vscode.window.showErrorMessage('There was no folder path provided');
+			vscode.window.showErrorMessage(`${EXTENSION_NAME}: There was no folder path provided`);
 		}
 	});
 
@@ -58,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (exportFolder) {
 			await ExcludeCommand.remove(exportFolder);
 		} else {
-			vscode.window.showErrorMessage('There was no folder/file path provided');
+			vscode.window.showErrorMessage(`${EXTENSION_NAME}: There was no folder/file path provided`);
 		}
 	});
 
@@ -87,7 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
 		includeFolderFile
 	);
 
-  console.log('TypeScript Export All is now active!');
+  Logger.info('TypeScript Barrel Generator is now active!');
 }
 
 

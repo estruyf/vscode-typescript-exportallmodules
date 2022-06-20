@@ -22,7 +22,7 @@
 		}
 	],
 	"engines": {
-		"vscode": "^1.35.0"
+		"vscode": "^1.64.0"
 	},
 	"categories": [
 		"Other"
@@ -168,7 +168,7 @@
 			"explorer": [
 				{
 					"id": "exportall.view",
-					"name": "TypeScript - Export View"
+					"name": "Barrel Generator: Export View"
 				}
 			]
 		},
@@ -183,14 +183,14 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
 		"@types/mocha": "^2.2.42",
 		"@types/node": "^10.17.24",
+		"@types/vscode": "^1.64.0",
 		"tslint": "^5.20.1",
 		"typescript": "^3.9.3",
-		"vscode": "^1.1.37"
+		"date-fns": "^2.28.0"
 	}
 }

@@ -1,5 +1,10 @@
 # Change Log
 
+## [2.4.0] 20-06-2022
+
+- Update to extension engine version `1.64.0` (January 2022) of VS Code
+- [#12](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/12): Check if there are changes to be applied to the barrel file. If not, there is no need to update the barrel file.
+
 ## [2.3.2] 20-06-2022
 
 - [#15](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/15): Fix for folder names with a dot notation

@@ -63,7 +63,7 @@ export class ExportProvider implements vscode.TreeDataProvider<ExportFolder> {
    * Refresh the tree view
    */
   public refresh(): void {
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(undefined);
   }
 
   /**
