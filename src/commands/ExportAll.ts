@@ -4,6 +4,11 @@ import * as fs from 'fs';
 import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE } from '../constants';
 import { getRelativeFolderPath } from '../helpers';
 
+interface FileOrFolderToExport { 
+  name: string; 
+  type: "file" | "folder"
+}
+
 export class ExportAll {
   public static barrelFiles = ["index.ts", "index.tsx"];
   
@@ -17,7 +22,7 @@ export class ExportAll {
 
       const folderPath = uri.fsPath;
       const files = fs.readdirSync(folderPath);
-      let filesToExport: string[] = [];
+      let filesToExport: FileOrFolderToExport[] = [];
       
       if (files && files.length > 0) {
         for (const file of files) {
@@ -75,15 +80,22 @@ export class ExportAll {
 
           // Add the file/folder to the array
           if (include) {
-            filesToExport.push(file);
+            try {
+              filesToExport.push({
+                name: file,
+                type: fs.statSync(absPath).isDirectory() ? "folder" : "file"
+              });
+            } catch (ex) {
+              // Ignore
+            }
           }
         }        
       }
 
       // Check if there are still files after the filter
       if (filesToExport && filesToExport.length > 0) {
-        let output = filesToExport.map((file) => {
-          const fileWithoutExtension = path.parse(file).name;
+        let output = filesToExport.map((item) => {
+          const fileWithoutExtension = item.type === "folder" ? item.name : path.parse(item.name).name;
           return `export * from ${quote}./${fileWithoutExtension}${quote}${semis ? ';' : ''}\n`;
         });
 
@@ -112,7 +124,7 @@ export class ExportAll {
         }
       }
     } catch (e) {
-      console.error(e.message);
+      console.error((e as Error).message);
       vscode.window.showErrorMessage("Sorry, something failed when exporting all modules in the current folder.");
     }
   }

@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.3.1] 20-06-2022
+
+- [#15](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/15): Fix for folder names with a dot notation
+
 ## [2.3.1] 07-02-2022
 
 - [#4](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/4): Fix file path in `file` parsing
