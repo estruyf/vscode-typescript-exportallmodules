@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE } from '../constants';
+import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE, EXTENSION_NAME } from '../constants';
 import { getRelativeFolderPath } from '../helpers';
+import { Logger } from '../helpers/logger';
 
 interface FileOrFolderToExport { 
   name: string; 
@@ -102,30 +103,41 @@ export class ExportAll {
         if (output && output.length > 0) {
           const filePath = path.join(uri.fsPath, "index.ts");
           if (!fs.existsSync(filePath)) {
-            fs.writeFileSync(filePath, output.join(""));
+            fs.writeFileSync(filePath, "");
           }
 
           const fileUri = vscode.Uri.file(filePath);
           const document = await vscode.workspace.openTextDocument(fileUri);
-          const documentRange = new vscode.Range(
-            document.lineAt(0).range.start,
-            document.lineAt(document.lineCount - 1).range.end
-          );
 
-          const edit = new vscode.WorkspaceEdit();
-          edit.replace(fileUri, documentRange, output.join(""));
-          await vscode.workspace.applyEdit(edit);
+          let fileContents = document.getText();
+          let updatedFileContents = output.join("");
 
-          await document.save();
+          if (fileContents !== updatedFileContents) {
+            const documentRange = new vscode.Range(
+              document.lineAt(0).range.start,
+              document.lineAt(document.lineCount - 1).range.end
+            );
 
-          if (!runSilent) {
-            vscode.window.showInformationMessage("TypeScript: Exported all files");
+            const edit = new vscode.WorkspaceEdit();
+            edit.replace(fileUri, documentRange, updatedFileContents);
+            await vscode.workspace.applyEdit(edit);
+
+            await document.save();
+
+            Logger.info(`Exported all files in ${uri.fsPath}`);
+            if (!runSilent) {
+              vscode.window.showInformationMessage(`${EXTENSION_NAME}: Exported all files`);
+            }
+          } else {
+            Logger.info(`Files are identical. Nothing to be updated ${uri.fsPath}`);
           }
         }
       }
     } catch (e) {
       console.error((e as Error).message);
-      vscode.window.showErrorMessage("Sorry, something failed when exporting all modules in the current folder.");
+
+      Logger.error(`Sorry, something failed when exporting all modules in ${uri.fsPath}`);
+      vscode.window.showErrorMessage(`${EXTENSION_NAME}: Sorry, something failed when exporting all modules in the current folder.`);
     }
   }
 }
