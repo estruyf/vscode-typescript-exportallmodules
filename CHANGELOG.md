@@ -1,5 +1,10 @@
 # Change Log
 
+## [2.4.1] 20-06-2022
+
+- Changed activation to `onStartupFinished`
+- Fix for `date-fns` dependency
+
 ## [2.4.0] 20-06-2022
 
 - Update to extension engine version `1.64.0` (January 2022) of VS Code
