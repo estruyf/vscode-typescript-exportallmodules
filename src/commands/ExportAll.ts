@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE, EXTENSION_NAME } from '../constants';
+import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE, EXTENSION_NAME, CONFIG_BANNER } from '../constants';
 import { getRelativeFolderPath } from '../helpers';
 import { Logger } from '../helpers/logger';
 
@@ -19,6 +19,7 @@ export class ExportAll {
       const excludeRel: string | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_RELATIVE_EXCLUDE));
       const includeFolders: boolean | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_INCLUDE_FOLDERS));
       const semis: boolean | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_SEMIS));
+      const banner: string | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_BANNER));
       const quote: "\"" | "'"  = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_QUOTE)) ?? "'";
 
       const folderPath = uri.fsPath;
@@ -111,6 +112,10 @@ export class ExportAll {
 
           let fileContents = document.getText();
           let updatedFileContents = output.join("");
+
+
+          // add barrel file banner if any
+          updatedFileContents =    banner !== ""? `//${banner} \n\n${updatedFileContents}` : updatedFileContents;
 
           if (fileContents !== updatedFileContents) {
             const documentRange = new vscode.Range(

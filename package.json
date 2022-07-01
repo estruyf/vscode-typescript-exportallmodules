@@ -159,6 +159,11 @@
 							"Double quote"
 						],
 						"description": "Specify the character that you want to use as the quoting character; typically ' or \""
+					},
+					"exportall.config.banner": {
+						"type": "string",
+						"default": "",
+						"description": "Specify the banner text that should be added at the top of each barrel file"
 					}
 				}
 			}
