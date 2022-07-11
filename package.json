@@ -159,6 +159,10 @@
 							"Double quote"
 						],
 						"description": "Specify the character that you want to use as the quoting character; typically ' or \""
+					},
+					"exportall.config.message": {
+						"type": "string",
+						"description": "Specify the message that you want to use in the generated barrel file. The message will be added at the top."
 					}
 				}
 			}

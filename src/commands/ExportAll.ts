@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE, EXTENSION_NAME } from '../constants';
+import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE, EXTENSION_NAME, CONFIG_MESSAGE, EXTENSION_KEY } from '../constants';
 import { getRelativeFolderPath } from '../helpers';
 import { Logger } from '../helpers/logger';
 
@@ -15,11 +15,13 @@ export class ExportAll {
   
   public static async start(uri: vscode.Uri, runSilent: boolean = true) {
     try {
-      const excludeFiles: string | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_EXCLUDE));
-      const excludeRel: string | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_RELATIVE_EXCLUDE));
-      const includeFolders: boolean | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_INCLUDE_FOLDERS));
-      const semis: boolean | undefined = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_SEMIS));
-      const quote: "\"" | "'"  = vscode.workspace.getConfiguration().get(getSettingName(CONFIG_QUOTE)) ?? "'";
+      const config = vscode.workspace.getConfiguration(EXTENSION_KEY);
+      const excludeFiles: string | undefined = config.get(CONFIG_EXCLUDE);
+      const excludeRel: string | undefined = config.get(CONFIG_RELATIVE_EXCLUDE);
+      const includeFolders: boolean | undefined = config.get(CONFIG_INCLUDE_FOLDERS);
+      const semis: boolean | undefined = config.get(CONFIG_SEMIS);
+      const quote: "\"" | "'"  = config.get(CONFIG_QUOTE) ?? "'";
+      const message: string | string[] | undefined = config.get<string | string[]>(CONFIG_MESSAGE);
 
       const folderPath = uri.fsPath;
       const files = fs.readdirSync(folderPath);
@@ -108,6 +110,12 @@ export class ExportAll {
 
           const fileUri = vscode.Uri.file(filePath);
           const document = await vscode.workspace.openTextDocument(fileUri);
+
+          // Check if the banner message needs to be added
+          if (message) {
+            output.unshift(`\n`);
+            output.unshift(`// ${message}\n`);
+          }
 
           let fileContents = document.getText();
           let updatedFileContents = output.join("");

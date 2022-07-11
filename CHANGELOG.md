@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.5.0] 11-07-2022
+
+- [#16](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/16): New `exportall.config.message` setting to specify a message that will be added at the top of the generated barrel file.
+
 ## [2.4.1] 20-06-2022
 
 - Changed activation to `onStartupFinished`
