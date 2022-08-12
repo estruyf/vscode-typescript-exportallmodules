@@ -9,6 +9,8 @@
 		"color": "#011627",
 		"theme": "dark"
 	},
+  "license": "MIT",
+  "author": "Elio Struyf <elio@struyfconsulting.be> (https://www.eliostruyf.com)",
 	"badges": [
 		{
 			"description": "version",
@@ -32,7 +34,6 @@
 		"export",
 		"barrel"
 	],
-	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/estruyf/vscode-typescript-exportallmodules"
