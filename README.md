@@ -8,12 +8,12 @@
 
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=eliostruyf.vscode-typescript-exportallmodules" title="Check it out on the Visual Studio Marketplace">
-    <img src="https://vsmarketplacebadge.apphb.com/version/eliostruyf.vscode-typescript-exportallmodules.svg" alt="Visual Studio Marketplace" style="display: inline-block" />
+    <img src="https://vsmarketplacebadges.dev/version/eliostruyf.vscode-typescript-exportallmodules.svg" alt="Visual Studio Marketplace" style="display: inline-block" />
   </a>
 
-  <img src="https://vsmarketplacebadge.apphb.com/installs/eliostruyf.vscode-typescript-exportallmodules.svg" alt="Number of installs"  style="display: inline-block;margin-left:10px" />
+  <img src="https://vsmarketplacebadges.dev/installs/eliostruyf.vscode-typescript-exportallmodules.svg" alt="Number of installs"  style="display: inline-block;margin-left:10px" />
   
-  <img src="https://vsmarketplacebadge.apphb.com/rating/eliostruyf.vscode-typescript-exportallmodules.svg" alt="Ratings" style="display: inline-block;margin-left:10px" />
+  <img src="https://vsmarketplacebadges.dev/rating/eliostruyf.vscode-typescript-exportallmodules.svg" alt="Ratings" style="display: inline-block;margin-left:10px" />
 
   <a href="https://www.buymeacoffee.com/zMeFRy9" title="Buy me a coffee" style="margin-left:10px">
     <img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-€%203-blue?logo=buy-me-a-coffee&style=flat" alt="Buy me a coffee" style="display: inline-block" />

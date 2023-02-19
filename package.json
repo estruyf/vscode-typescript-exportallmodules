@@ -73,8 +73,20 @@
 				"title": "Refresh"
 			}
 		],
+		"submenus": [
+      {
+        "id": "exportall.submenu",
+        "label": "TypeScript Barrel"
+      }
+    ],
 		"menus": {
 			"explorer/context": [
+				{
+          "submenu": "exportall.submenu",
+          "group": "TypeScript@1"
+        }
+			],
+			"exportall.submenu": [
 				{
 					"command": "exportall.generate",
 					"when": "explorerResourceIsFolder",

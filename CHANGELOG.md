@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.6.0] 19-02-2023
+
+- Created a submenu for the context menu items
+
 ## [2.5.0] 11-07-2022
 
 - [#16](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/16): New `exportall.config.message` setting to specify a message that will be added at the top of the generated barrel file.
