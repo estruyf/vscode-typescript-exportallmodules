@@ -28,7 +28,9 @@ interface FileOrFolderToExport {
 export class ExportAll {
   public static barrelFiles = ["index.ts", "index.tsx"];
 
-  public static async start(uri: vscode.Uri, runSilent: boolean = true) {
+  public static async start(crntUri: vscode.Uri, runSilent: boolean = true) {
+    const uri = vscode.Uri.file(clearWildcard(parseWinPath(crntUri.fsPath)));
+
     try {
       const config = vscode.workspace.getConfiguration(EXTENSION_KEY);
       const excludeFiles: string | undefined = config.get(CONFIG_EXCLUDE);

@@ -26,7 +26,7 @@ Working with TypeScript? Want to make your TypeScript imports cleaner? Use this 
 
 > **Info**: A "barrel" is a way to rollup exports from several modules into a single convenient module. The barrel itself is a module file that re-exports selected exports of other modules.
 
-Example: 
+Example:
 
 ```typescript
 // folder/index.ts
@@ -36,7 +36,7 @@ export * from './bar';
 
 ## ✨ Functionalities
 
-The extension allows you to manually or automatically export the modules to a barrel file. For the automatic way, you first have to create a listener for the folder for which you want to create the automated export. 
+The extension allows you to manually or automatically export the modules to a barrel file. For the automatic way, you first have to create a listener for the folder for which you want to create the automated export.
 
 In both the manual and automatic way, an `index.ts` file will be created with a reference to all the folder/files in the current directory.
 
@@ -92,7 +92,7 @@ The extension makes use of the following settings:
 | --- | --- | --- | --- |
 | `exportall.config.includeFoldersToExport` | Specifies if folder (which contain a `index.ts` file) will also be included in the module export. | boolean | `true` |
 | `exportall.config.exclude` | Specify which files you want to exclude the `index.ts` file. Works on the whole filename or part of the filename. | string[] | `['.test.', '.spec.']` |
-| `exportall.config.folderListener` | Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder. | string[] | `[]` |
+| `exportall.config.folderListener` | Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder.<br/><br/>To listen to sub-folders, you can include the directory wildcard `**` to the path.  | string[] | `[]` |
 | `exportall.config.relExclusion` | Specify the relative folder/file paths to exclude from the export. | string[] | `[]` |
 | `exportall.config.semis` | Specify if you want to enable/disable the usage of semis in the barrel file. | boolean | `true` |
 | `exportall.config.quote` | Specify the character that you want to use as the quoting character; typically `'` or `"`. | string | `'` |
