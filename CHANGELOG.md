@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.7.0] 11-09-2023
+
+- [#23](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/23): Bundle the extension with ESBuild
+
 ## [2.6.0] 19-02-2023
 
 - Created a submenu for the context menu items
