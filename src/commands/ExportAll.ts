@@ -1,32 +1,53 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
-import * as fs from 'fs';
-import { getSettingName, CONFIG_EXCLUDE, CONFIG_INCLUDE_FOLDERS, CONFIG_RELATIVE_EXCLUDE, CONFIG_SEMIS, CONFIG_QUOTE, EXTENSION_NAME, CONFIG_MESSAGE, EXTENSION_KEY } from '../constants';
-import { getRelativeFolderPath } from '../helpers';
-import { Logger } from '../helpers/logger';
+import * as vscode from "vscode";
+import * as path from "path";
+import * as fs from "fs";
+import {
+  CONFIG_EXCLUDE,
+  CONFIG_INCLUDE_FOLDERS,
+  CONFIG_RELATIVE_EXCLUDE,
+  CONFIG_SEMIS,
+  CONFIG_QUOTE,
+  EXTENSION_NAME,
+  CONFIG_MESSAGE,
+  EXTENSION_KEY,
+  CONFIG_FOLDERS,
+} from "../constants";
+import {
+  clearWildcard,
+  getAbsoluteFolderPath,
+  getRelativeFolderPath,
+  parseWinPath,
+} from "../helpers";
+import { Logger } from "../helpers/logger";
 
-interface FileOrFolderToExport { 
-  name: string; 
-  type: "file" | "folder"
+interface FileOrFolderToExport {
+  name: string;
+  type: "file" | "folder";
 }
 
 export class ExportAll {
   public static barrelFiles = ["index.ts", "index.tsx"];
-  
+
   public static async start(uri: vscode.Uri, runSilent: boolean = true) {
     try {
       const config = vscode.workspace.getConfiguration(EXTENSION_KEY);
       const excludeFiles: string | undefined = config.get(CONFIG_EXCLUDE);
-      const excludeRel: string | undefined = config.get(CONFIG_RELATIVE_EXCLUDE);
-      const includeFolders: boolean | undefined = config.get(CONFIG_INCLUDE_FOLDERS);
+      const excludeRel: string | undefined = config.get(
+        CONFIG_RELATIVE_EXCLUDE
+      );
+      const includeFolders: boolean | undefined = config.get(
+        CONFIG_INCLUDE_FOLDERS
+      );
       const semis: boolean | undefined = config.get(CONFIG_SEMIS);
-      const quote: "\"" | "'"  = config.get(CONFIG_QUOTE) ?? "'";
-      const message: string | string[] | undefined = config.get<string | string[]>(CONFIG_MESSAGE);
+      const quote: '"' | "'" = config.get(CONFIG_QUOTE) ?? "'";
+      const message: string | string[] | undefined = config.get<
+        string | string[]
+      >(CONFIG_MESSAGE);
 
       const folderPath = uri.fsPath;
       const files = fs.readdirSync(folderPath);
       let filesToExport: FileOrFolderToExport[] = [];
-      
+
       if (files && files.length > 0) {
         for (const file of files) {
           const absPath = path.join(folderPath, file);
@@ -34,7 +55,10 @@ export class ExportAll {
           let relPath = file;
 
           // Include all TS files except for the index
-          if ((file.endsWith(".ts") || file.endsWith(".tsx")) && this.barrelFiles.indexOf(file.toLowerCase()) === -1) {
+          if (
+            (file.endsWith(".ts") || file.endsWith(".tsx")) &&
+            this.barrelFiles.indexOf(file.toLowerCase()) === -1
+          ) {
             relPath = getRelativeFolderPath(absPath);
             include = true;
           }
@@ -86,20 +110,23 @@ export class ExportAll {
             try {
               filesToExport.push({
                 name: file,
-                type: fs.statSync(absPath).isDirectory() ? "folder" : "file"
+                type: fs.statSync(absPath).isDirectory() ? "folder" : "file",
               });
             } catch (ex) {
               // Ignore
             }
           }
-        }        
+        }
       }
 
       // Check if there are still files after the filter
       if (filesToExport && filesToExport.length > 0) {
         let output = filesToExport.map((item) => {
-          const fileWithoutExtension = item.type === "folder" ? item.name : path.parse(item.name).name;
-          return `export * from ${quote}./${fileWithoutExtension}${quote}${semis ? ';' : ''}\n`;
+          const fileWithoutExtension =
+            item.type === "folder" ? item.name : path.parse(item.name).name;
+          return `export * from ${quote}./${fileWithoutExtension}${quote}${
+            semis ? ";" : ""
+          }\n`;
         });
 
         if (output && output.length > 0) {
@@ -134,18 +161,52 @@ export class ExportAll {
 
             Logger.info(`Exported all files in ${uri.fsPath}`);
             if (!runSilent) {
-              vscode.window.showInformationMessage(`${EXTENSION_NAME}: Exported all files`);
+              vscode.window.showInformationMessage(
+                `${EXTENSION_NAME}: Exported all files`
+              );
             }
           } else {
-            Logger.info(`Files are identical. Nothing to be updated ${uri.fsPath}`);
+            Logger.info(
+              `Files are identical. Nothing to be updated ${uri.fsPath}`
+            );
+          }
+        }
+      }
+
+      if (runSilent) {
+        let folderListener: string[] | undefined = vscode.workspace
+          .getConfiguration(EXTENSION_KEY)
+          .get(CONFIG_FOLDERS);
+
+        folderListener = (folderListener || []).map((folder) => {
+          let absFolder = getAbsoluteFolderPath(folder);
+          return clearWildcard(absFolder);
+        });
+
+        const matchingFolders = folderListener.filter((folder) =>
+          uri.fsPath.includes(folder)
+        );
+
+        if (matchingFolders.length > 0) {
+          for (let folder of matchingFolders) {
+            if (parseWinPath(folder) !== parseWinPath(uri.fsPath)) {
+              Logger.info(`Exporting files from ${folder}`);
+
+              const folderUri = vscode.Uri.file(folder);
+              await ExportAll.start(folderUri);
+            }
           }
         }
       }
     } catch (e) {
       console.error((e as Error).message);
 
-      Logger.error(`Sorry, something failed when exporting all modules in ${uri.fsPath}`);
-      vscode.window.showErrorMessage(`${EXTENSION_NAME}: Sorry, something failed when exporting all modules in the current folder.`);
+      Logger.error(
+        `Sorry, something failed when exporting all modules in ${uri.fsPath}`
+      );
+      vscode.window.showErrorMessage(
+        `${EXTENSION_NAME}: Sorry, something failed when exporting all modules in the current folder.`
+      );
     }
   }
 }

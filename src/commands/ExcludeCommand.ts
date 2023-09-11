@@ -1,14 +1,17 @@
-import * as vscode from 'vscode';
-import { getRelativeFolderPath, getAbsoluteFolderPath } from '../helpers';
-import { EXTENSION_KEY, CONFIG_RELATIVE_EXCLUDE, CONFIG_FOLDERS } from '../constants';
-import { ExportFolder } from '../providers';
-import { ExportAll } from '.';
+import * as vscode from "vscode";
+import { getRelativeFolderPath, getAbsoluteFolderPath } from "../helpers";
+import {
+  EXTENSION_KEY,
+  CONFIG_RELATIVE_EXCLUDE,
+  CONFIG_FOLDERS,
+} from "../constants";
+import { ExportFolder } from "../providers";
+import { ExportAll } from ".";
 
 export class ExcludeCommand {
-
   /**
    * Add path to the exclusion list
-   * @param uri 
+   * @param uri
    */
   public static async add(uri: vscode.Uri) {
     let relativePath = getRelativeFolderPath(uri.fsPath);
@@ -21,13 +24,13 @@ export class ExcludeCommand {
 
   /**
    * Remove the path from the exclusion list
-   * @param uri 
+   * @param uri
    */
   public static async remove(exportFolder: ExportFolder) {
     if (exportFolder.value) {
       const relativePath = getRelativeFolderPath(exportFolder.value);
       let options = this.getOptions();
-      options = options.filter(p => p !== relativePath);
+      options = options.filter((p) => p !== relativePath);
       options = [...new Set(options)];
       await this.update(options);
       this.updateExports();
@@ -58,7 +61,9 @@ export class ExcludeCommand {
    * Do a new export of the folders
    */
   private static updateExports() {
-    const folderListener: string[] | undefined = vscode.workspace.getConfiguration(EXTENSION_KEY).get(CONFIG_FOLDERS);
+    const folderListener: string[] | undefined = vscode.workspace
+      .getConfiguration(EXTENSION_KEY)
+      .get(CONFIG_FOLDERS);
     if (folderListener) {
       for (const folder of folderListener) {
         const absFolder = getAbsoluteFolderPath(folder);
