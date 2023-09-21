@@ -40,6 +40,9 @@ export class ExportAll {
       const includeFolders: boolean | undefined = config.get(
         CONFIG_INCLUDE_FOLDERS
       );
+      const keepExtensions: boolean | undefined = config.get(
+        CONFIG_KEEP_EXTENSIONS
+      );
       const semis: boolean | undefined = config.get(CONFIG_SEMIS);
       const quote: '"' | "'" = config.get(CONFIG_QUOTE) ?? "'";
       const message: string | string[] | undefined = config.get<
@@ -124,11 +127,15 @@ export class ExportAll {
       // Check if there are still files after the filter
       if (filesToExport && filesToExport.length > 0) {
         let output = filesToExport.map((item) => {
-          const fileWithoutExtension =
-            item.type === "folder" ? item.name : path.parse(item.name).name;
-          return `export * from ${quote}./${fileWithoutExtension}${quote}${
-            semis ? ";" : ""
-          }\n`;
+          let filePath: string;
+          if (keepExtensions) {
+            filePath =
+              item.type === "folder" ? path.join(item.name, "index.ts") : item.name;
+          } else {
+            filePath =
+              item.type === "folder" ? item.name : path.parse(item.name).name;
+          }
+          return `export * from ${quote}./${filePath}${quote}${semis ? ";" : ""}\n`;
         });
 
         if (output && output.length > 0) {

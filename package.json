@@ -160,6 +160,11 @@
 						"default": true,
 						"description": "Specify if you want to enable/disable the usage of semis in the barrel file."
 					},
+					"exportall.config.keepExtensions": {
+						"type": "boolean",
+						"default": false,
+						"description": "Whether to keep file extensions (for use with Deno/ESM)."
+					},
 					"exportall.config.quote": {
 						"type": "string",
 						"default": "'",
