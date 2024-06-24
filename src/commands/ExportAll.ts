@@ -16,6 +16,7 @@ import {
 import {
   clearWildcard,
   getAbsoluteFolderPath,
+  getFileContents,
   getRelativeFolderPath,
   parseFileForNamedExports,
   parseWinPath,
@@ -131,15 +132,19 @@ export class ExportAll {
             item.type === "folder" ? item.name : path.parse(item.name).name;
           if (namedExports) {
             const filePath = path.join(uri.fsPath, item.name);
-            const fileContents = fs.readFileSync(filePath, 'utf8');
+            const fileContents = getFileContents(filePath);
             const { namedExports, typeExports } = parseFileForNamedExports(fileContents);
 
             const namedExportsStr = namedExports.filter(Boolean).join(', ');
-            const typeExportsStr = typeExports.filter(Boolean).map(typeExport => `type ${typeExport}`).join(', ');
-            if (!namedExportsStr && !typeExportsStr) {
-              return '';
+            const typeExportsStr = typeExports.filter(Boolean).join(', ');
+            let exportStr = '';
+            if (namedExportsStr) {
+              exportStr += `export { ${namedExportsStr} } from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
             }
-            return `export { ${namedExportsStr}${typeExportsStr ? `, ${typeExportsStr}` : ''} } from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
+            if (typeExportsStr) {
+              exportStr += `export type { ${typeExportsStr} } from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
+            }
+            return exportStr;
           } else {
             return `export * from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
           }
