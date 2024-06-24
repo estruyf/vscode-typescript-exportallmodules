@@ -6,6 +6,7 @@ export const CONFIG_INCLUDE_FOLDERS = 'config.includeFoldersToExport';
 export const CONFIG_SEMIS = 'config.semis';
 export const CONFIG_QUOTE = 'config.quote';
 export const CONFIG_MESSAGE = 'config.message';
+export const CONFIG_NAMED_EXPORTS = 'config.namedExports';
 
 export const EXTENSION_NAME = "Barrel Generator";
 

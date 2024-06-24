@@ -11,11 +11,13 @@ import {
   CONFIG_MESSAGE,
   EXTENSION_KEY,
   CONFIG_FOLDERS,
+  CONFIG_NAMED_EXPORTS,
 } from "../constants";
 import {
   clearWildcard,
   getAbsoluteFolderPath,
   getRelativeFolderPath,
+  parseFileForNamedExports,
   parseWinPath,
 } from "../helpers";
 import { Logger } from "../helpers/logger";
@@ -40,6 +42,7 @@ export class ExportAll {
       const includeFolders: boolean | undefined = config.get(
         CONFIG_INCLUDE_FOLDERS
       );
+      const namedExports: boolean | undefined = config.get(CONFIG_NAMED_EXPORTS);
       const semis: boolean | undefined = config.get(CONFIG_SEMIS);
       const quote: '"' | "'" = config.get(CONFIG_QUOTE) ?? "'";
       const message: string | string[] | undefined = config.get<
@@ -126,9 +129,20 @@ export class ExportAll {
         let output = filesToExport.map((item) => {
           const fileWithoutExtension =
             item.type === "folder" ? item.name : path.parse(item.name).name;
-          return `export * from ${quote}./${fileWithoutExtension}${quote}${
-            semis ? ";" : ""
-          }\n`;
+          if (namedExports) {
+            const filePath = path.join(uri.fsPath, item.name);
+            const fileContents = fs.readFileSync(filePath, 'utf8');
+            const { namedExports, typeExports } = parseFileForNamedExports(fileContents);
+
+            const namedExportsStr = namedExports.filter(Boolean).join(', ');
+            const typeExportsStr = typeExports.filter(Boolean).map(typeExport => `type ${typeExport}`).join(', ');
+            if (!namedExportsStr && !typeExportsStr) {
+              return '';
+            }
+            return `export { ${namedExportsStr}${typeExportsStr ? `, ${typeExportsStr}` : ''} } from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
+          } else {
+            return `export * from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
+          }
         });
 
         if (output && output.length > 0) {
