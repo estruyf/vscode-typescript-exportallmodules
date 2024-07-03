@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.8.0] 03-07-2024
+
+- [#13](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/13) [#14](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/14): Added support for named exports (thanks to [Mike Rheault](https://github.com/mrheault))
+
 ## [2.7.0] 11-09-2023
 
 - [#10](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/10): Wilcard support added

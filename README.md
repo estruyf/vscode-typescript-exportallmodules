@@ -90,6 +90,7 @@ The extension makes use of the following settings:
 
 | Setting | Description | Type | Default |
 | --- | --- | --- | --- |
+| `exportall.config.namedExports` | Specifies if you want to use named exports in the barrel file. | boolean | `false` |
 | `exportall.config.includeFoldersToExport` | Specifies if folder (which contain a `index.ts` file) will also be included in the module export. | boolean | `true` |
 | `exportall.config.exclude` | Specify which files you want to exclude the `index.ts` file. Works on the whole filename or part of the filename. | string[] | `['.test.', '.spec.']` |
 | `exportall.config.folderListener` | Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder.<br/><br/>To listen to sub-folders, you can include the directory wildcard `**` to the path.  | string[] | `[]` |
@@ -105,6 +106,12 @@ The extension makes use of the following settings:
 ## 💪 Contribute
 
 Experiencing any issues, or got feedback to share? Feel free to raise this in the issue list of the repo: [issues](https://github.com/estruyf/vscode-typescript-exportallmodules/issues).
+
+<p align="center">
+  <a href="https://github.com/estruyf/vscode-typescript-exportallmodules/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=estruyf/vscode-typescript-exportallmodules" alt="TypeScript Barrel Generator" />
+  </a>
+</p>
 
 ## 🔑 License
 
