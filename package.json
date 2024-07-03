@@ -2,7 +2,7 @@
 	"name": "vscode-typescript-exportallmodules",
 	"displayName": "TypeScript Barrel Generator",
 	"description": "VSCode extension which generates a barrel `index.ts` file with all the module exports from the current directory.",
-	"version": "2.8.0",
+	"version": "2.9.0",
 	"icon": "assets/export-all.png",
 	"publisher": "eliostruyf",
 	"galleryBanner": {
@@ -11,7 +11,8 @@
 	},
 	"license": "MIT",
 	"author": "Elio Struyf <elio@struyfconsulting.be> (https://www.eliostruyf.com)",
-	"badges": [{
+	"badges": [
+		{
 			"description": "version",
 			"url": "https://img.shields.io/github/package-json/v/estruyf/vscode-typescript-exportallmodules?color=green&label=vscode-front-matter&style=flat-square",
 			"href": "https://github.com/estruyf/vscode-typescript-exportallmodules"
@@ -42,7 +43,8 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
+		"commands": [
+			{
 				"command": "exportall.generate",
 				"title": "Export all modules",
 				"category": "Barrel Generator"
@@ -83,16 +85,21 @@
 				"category": "Barrel Generator"
 			}
 		],
-		"submenus": [{
-			"id": "exportall.submenu",
-			"label": "TypeScript Barrel"
-		}],
+		"submenus": [
+			{
+				"id": "exportall.submenu",
+				"label": "TypeScript Barrel"
+			}
+		],
 		"menus": {
-			"explorer/context": [{
-				"submenu": "exportall.submenu",
-				"group": "TypeScript@1"
-			}],
-			"exportall.submenu": [{
+			"explorer/context": [
+				{
+					"submenu": "exportall.submenu",
+					"group": "TypeScript@1"
+				}
+			],
+			"exportall.submenu": [
+				{
 					"command": "exportall.generate",
 					"when": "explorerResourceIsFolder",
 					"group": "TypeScript@1"
@@ -113,11 +120,14 @@
 					"group": "TypeScript@4"
 				}
 			],
-			"view/title": [{
-				"command": "exportall.refreshView",
-				"when": "view == exportall.view"
-			}],
-			"view/item/context": [{
+			"view/title": [
+				{
+					"command": "exportall.refreshView",
+					"when": "view == exportall.view"
+				}
+			],
+			"view/item/context": [
+				{
 					"command": "exportall.removeFolder",
 					"when": "view == exportall.view && viewItem == exportall.listener && viewItem != exportall.header",
 					"group": "TypeScript@1"
@@ -128,98 +138,113 @@
 					"group": "TypeScript@2"
 				}
 			],
-			"commandPalette": [{
-				"command": "exportall.generateCurrentFile",
-				"when": "editorLangId == typescript || editorLangId == typescriptreact"
-			}, {
-				"command": "exportall.generate",
-				"when": "false"
-			}, {
-				"command": "exportall.addFolder",
-				"when": "false"
-			}, {
-				"command": "exportall.removeFolder",
-				"when": "false"
-			}, {
-				"command": "exportall.excludeFolder",
-				"when": "false"
-			}, {
-				"command": "exportall.excludeFile",
-				"when": "false"
-			}, {
-				"command": "exportall.includeFolderFile",
-				"when": "false"
-			}, {
-				"command": "exportall.refreshView",
-				"when": "false"
-			}]
+			"commandPalette": [
+				{
+					"command": "exportall.generateCurrentFile",
+					"when": "editorLangId == typescript || editorLangId == typescriptreact"
+				},
+				{
+					"command": "exportall.generate",
+					"when": "false"
+				},
+				{
+					"command": "exportall.addFolder",
+					"when": "false"
+				},
+				{
+					"command": "exportall.removeFolder",
+					"when": "false"
+				},
+				{
+					"command": "exportall.excludeFolder",
+					"when": "false"
+				},
+				{
+					"command": "exportall.excludeFile",
+					"when": "false"
+				},
+				{
+					"command": "exportall.includeFolderFile",
+					"when": "false"
+				},
+				{
+					"command": "exportall.refreshView",
+					"when": "false"
+				}
+			]
 		},
-		"configuration": [{
-			"type": "object",
-			"title": "Export all modules",
-			"properties": {
-				"exportall.config.exclude": {
-					"type": "array",
-					"default": [
-						".test.",
-						".spec."
-					],
-					"description": "Specify which files you want to exclude the `index.ts` file. Works on the whole name or part of the name."
-				},
-				"exportall.config.relExclusion": {
-					"type": "array",
-					"default": [],
-					"description": "Specify the relative folder/file paths to exclude from the export."
-				},
-				"exportall.config.includeFoldersToExport": {
-					"type": "boolean",
-					"default": true,
-					"description": "Specify if you want to include folder as well to the module export. Will only be applied if folder contains a `index.ts` file."
-				},
-				"exportall.config.namedExports": {
-					"type": "boolean",
-					"default": false,
-					"description": "Specify if you want to use named exports in the barrel file."
-				},
-				"exportall.config.folderListener": {
-					"type": "array",
-					"default": [],
-					"description": "Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder."
-				},
-				"exportall.config.semis": {
-					"type": "boolean",
-					"default": true,
-					"description": "Specify if you want to enable/disable the usage of semis in the barrel file."
-				},
-				"exportall.config.quote": {
-					"type": "string",
-					"default": "'",
-					"enum": [
-						"'",
-						"\""
-					],
-					"enumDescriptions": [
-						"Single quote",
-						"Double quote"
-					],
-					"description": "Specify the character that you want to use as the quoting character; typically ' or \""
-				},
-				"exportall.config.message": {
-					"type": "string",
-					"description": "Specify the message that you want to use in the generated barrel file. The message will be added at the top."
+		"configuration": [
+			{
+				"type": "object",
+				"title": "Export all modules",
+				"properties": {
+					"exportall.config.exclude": {
+						"type": "array",
+						"default": [
+							".test.",
+							".spec."
+						],
+						"description": "Specify which files you want to exclude the `index.ts` file. Works on the whole name or part of the name."
+					},
+					"exportall.config.relExclusion": {
+						"type": "array",
+						"default": [],
+						"description": "Specify the relative folder/file paths to exclude from the export."
+					},
+					"exportall.config.includeFoldersToExport": {
+						"type": "boolean",
+						"default": true,
+						"description": "Specify if you want to include folder as well to the module export. Will only be applied if folder contains a `index.ts` file."
+					},
+					"exportall.config.namedExports": {
+						"type": "boolean",
+						"default": false,
+						"description": "Specify if you want to use named exports in the barrel file."
+					},
+					"exportall.config.folderListener": {
+						"type": "array",
+						"default": [],
+						"description": "Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder."
+					},
+					"exportall.config.semis": {
+						"type": "boolean",
+						"default": true,
+						"description": "Specify if you want to enable/disable the usage of semis in the barrel file."
+					},
+					"exportall.config.quote": {
+						"type": "string",
+						"default": "'",
+						"enum": [
+							"'",
+							"\""
+						],
+						"enumDescriptions": [
+							"Single quote",
+							"Double quote"
+						],
+						"description": "Specify the character that you want to use as the quoting character; typically ' or \""
+					},
+					"exportall.config.message": {
+						"type": "string",
+						"description": "Specify the message that you want to use in the generated barrel file. The message will be added at the top."
+					}
 				}
 			}
-		}],
+		],
 		"views": {
-			"explorer": [{
-				"id": "exportall.view",
-				"name": "Barrel Generator: Export View"
-			}]
+			"explorer": [
+				{
+					"id": "exportall.view",
+					"name": "Barrel Generator: Export View"
+				}
+			]
 		},
-		"viewsWelcome": [{
-			"view": "exportall.view",
-			"contents": "There are currently no TypeScript folder listeners"
-		}]
+		"viewsWelcome": [
+			{
+				"view": "exportall.view",
+				"contents": "There are currently no TypeScript folder listeners"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
