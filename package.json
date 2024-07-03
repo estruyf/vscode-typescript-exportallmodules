@@ -150,6 +150,11 @@
 						"default": true,
 						"description": "Specify if you want to include folder as well to the module export. Will only be applied if folder contains a `index.ts` file."
 					},
+					"exportall.config.namedExports": {
+						"type": "boolean",
+						"default": false,
+						"description": "Specify if you want to use named exports in the barrel file."
+					},
 					"exportall.config.folderListener": {
 						"type": "array",
 						"default": [],
