@@ -8,6 +8,7 @@ import {
   EXTENSION_NAME,
 } from "./constants";
 import { Logger } from "./helpers/logger";
+import { parse } from "path";
 
 export function activate(context: vscode.ExtensionContext) {
   const generate = vscode.commands.registerCommand(
@@ -19,6 +20,20 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage(
           `${EXTENSION_NAME}: No folder path selected`
         );
+      }
+    }
+  );
+
+  const generateCurrentFile = vscode.commands.registerCommand(
+    getCommandName(COMMAND_KEYS.GenerateCurrentFile),
+    async () => {
+      const editor = vscode.window.activeTextEditor;
+      if (editor) {
+        const { uri } = editor.document;
+        const parsed = parse(uri.fsPath);
+        await ExportAll.start(vscode.Uri.file(parsed.dir), false);
+      } else {
+        vscode.window.showErrorMessage(`${EXTENSION_NAME}: No file selected`);
       }
     }
   );
@@ -112,6 +127,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     generate,
+    generateCurrentFile,
     addListener,
     removeListener,
     refresh,

@@ -42,6 +42,12 @@ In both the manual and automatic way, an `index.ts` file will be created with a 
 
 > **Info**: If there are folders/files you want to get excluded from the export, you can do this by right-clicking on the folder/file and clicking on the `TypeScript: Exclude folder/file from export`.
 
+### Create from the current file directory
+
+By using the `Barrel Generator: Export all modules from the current file directory` command, you can create a barrel file from the current file path its directory.
+
+> **Info**: If you want, you can add your own keybinding to this command to make it easier to trigger.
+
 ### Manual creation
 
 <p align="center">
