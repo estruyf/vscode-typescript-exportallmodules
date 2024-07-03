@@ -1,69 +1,56 @@
 import * as vscode from "vscode";
-import * as path from "path";
-import * as fs from "fs";
 import {
-  CONFIG_EXCLUDE,
-  CONFIG_INCLUDE_FOLDERS,
-  CONFIG_RELATIVE_EXCLUDE,
-  CONFIG_SEMIS,
-  CONFIG_QUOTE,
   EXTENSION_NAME,
-  CONFIG_MESSAGE,
   EXTENSION_KEY,
   CONFIG_FOLDERS,
-  CONFIG_NAMED_EXPORTS,
+  BarrelFiles,
 } from "../constants";
 import {
   clearWildcard,
+  fileExists,
   getAbsoluteFolderPath,
   getFileContents,
   getRelativeFolderPath,
   parseFileForNamedExports,
   parseWinPath,
+  writeFile,
 } from "../helpers";
 import { Logger } from "../helpers/logger";
-
-interface FileOrFolderToExport {
-  name: string;
-  type: "file" | "folder";
-}
+import { join, parse } from "path";
+import { getConfig } from "../helpers/getConfig";
+import { FileOrFolderToExport } from "../models";
 
 export class ExportAll {
-  public static barrelFiles = ["index.ts", "index.tsx"];
-
   public static async start(crntUri: vscode.Uri, runSilent: boolean = true) {
     const uri = vscode.Uri.file(clearWildcard(parseWinPath(crntUri.fsPath)));
 
     try {
-      const config = vscode.workspace.getConfiguration(EXTENSION_KEY);
-      const excludeFiles: string | undefined = config.get(CONFIG_EXCLUDE);
-      const excludeRel: string | undefined = config.get(
-        CONFIG_RELATIVE_EXCLUDE
-      );
-      const includeFolders: boolean | undefined = config.get(
-        CONFIG_INCLUDE_FOLDERS
-      );
-      const namedExports: boolean | undefined = config.get(CONFIG_NAMED_EXPORTS);
-      const semis: boolean | undefined = config.get(CONFIG_SEMIS);
-      const quote: '"' | "'" = config.get(CONFIG_QUOTE) ?? "'";
-      const message: string | string[] | undefined = config.get<
-        string | string[]
-      >(CONFIG_MESSAGE);
+      const {
+        excludeFiles,
+        excludeRel,
+        includeFolders,
+        message,
+        namedExports,
+        quote,
+        semis,
+      } = getConfig();
 
       const folderPath = uri.fsPath;
-      const files = fs.readdirSync(folderPath);
+      const files = await vscode.workspace.fs.readDirectory(
+        vscode.Uri.parse(folderPath)
+      );
       let filesToExport: FileOrFolderToExport[] = [];
 
       if (files && files.length > 0) {
-        for (const file of files) {
-          const absPath = path.join(folderPath, file);
+        for (const [file] of files) {
+          const absPath = join(folderPath, file);
           let include = false;
           let relPath = file;
 
           // Include all TS files except for the index
           if (
             (file.endsWith(".ts") || file.endsWith(".tsx")) &&
-            this.barrelFiles.indexOf(file.toLowerCase()) === -1
+            BarrelFiles.indexOf(file.toLowerCase()) === -1
           ) {
             relPath = getRelativeFolderPath(absPath);
             include = true;
@@ -72,10 +59,13 @@ export class ExportAll {
           // Check if folders should be included
           if (includeFolders) {
             // Only allow folder which contain an index file
-            if (fs.lstatSync(absPath).isDirectory()) {
-              for (const indexFile of this.barrelFiles) {
-                const indexPath = path.join(absPath, indexFile);
-                if (fs.existsSync(indexPath)) {
+            const stat = await vscode.workspace.fs.stat(
+              vscode.Uri.file(absPath)
+            );
+            if (stat.type === vscode.FileType.Directory) {
+              for (const indexFile of BarrelFiles) {
+                const indexPath = join(absPath, indexFile);
+                if (await fileExists(indexPath)) {
                   relPath = getRelativeFolderPath(absPath);
                   include = true;
                   break;
@@ -114,9 +104,13 @@ export class ExportAll {
           // Add the file/folder to the array
           if (include) {
             try {
+              const stat = await vscode.workspace.fs.stat(
+                vscode.Uri.file(absPath)
+              );
               filesToExport.push({
                 name: file,
-                type: fs.statSync(absPath).isDirectory() ? "folder" : "file",
+                type:
+                  stat.type === vscode.FileType.Directory ? "folder" : "file",
               });
             } catch (ex) {
               // Ignore
@@ -127,33 +121,45 @@ export class ExportAll {
 
       // Check if there are still files after the filter
       if (filesToExport && filesToExport.length > 0) {
-        let output = filesToExport.map((item) => {
-          const fileWithoutExtension =
-            item.type === "folder" ? item.name : path.parse(item.name).name;
-          if (namedExports) {
-            const filePath = path.join(uri.fsPath, item.name);
-            const fileContents = getFileContents(filePath);
-            const { namedExports, typeExports } = parseFileForNamedExports(fileContents);
+        const output: string[] = [];
 
-            const namedExportsStr = namedExports.filter(Boolean).join(', ');
-            const typeExportsStr = typeExports.filter(Boolean).join(', ');
-            let exportStr = '';
+        for (const item of filesToExport) {
+          const fileWithoutExtension =
+            item.type === "folder" ? item.name : parse(item.name).name;
+          if (namedExports) {
+            const filePath = join(uri.fsPath, item.name);
+            const fileContents = await getFileContents(filePath);
+            const { namedExports, typeExports } = parseFileForNamedExports(
+              fileContents || ""
+            );
+
+            const namedExportsStr = namedExports.filter(Boolean).join(", ");
+            const typeExportsStr = typeExports.filter(Boolean).join(", ");
+            let exportStr = "";
             if (namedExportsStr) {
-              exportStr += `export { ${namedExportsStr} } from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
+              exportStr += `export { ${namedExportsStr} } from ${quote}./${fileWithoutExtension}${quote}${
+                semis ? ";" : ""
+              }\n`;
             }
             if (typeExportsStr) {
-              exportStr += `export type { ${typeExportsStr} } from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
+              exportStr += `export type { ${typeExportsStr} } from ${quote}./${fileWithoutExtension}${quote}${
+                semis ? ";" : ""
+              }\n`;
             }
-            return exportStr;
+            output.push(exportStr);
           } else {
-            return `export * from ${quote}./${fileWithoutExtension}${quote}${semis ? ";" : ""}\n`;
+            output.push(
+              `export * from ${quote}./${fileWithoutExtension}${quote}${
+                semis ? ";" : ""
+              }\n`
+            );
           }
-        });
+        }
 
         if (output && output.length > 0) {
-          const filePath = path.join(uri.fsPath, "index.ts");
-          if (!fs.existsSync(filePath)) {
-            fs.writeFileSync(filePath, "");
+          const filePath = join(uri.fsPath, "index.ts");
+          if (!(await fileExists(filePath))) {
+            await writeFile(filePath, "");
           }
 
           const fileUri = vscode.Uri.file(filePath);
@@ -220,11 +226,10 @@ export class ExportAll {
         }
       }
     } catch (e) {
-      console.error((e as Error).message);
-
       Logger.error(
         `Sorry, something failed when exporting all modules in ${uri.fsPath}`
       );
+      Logger.error((e as Error).message);
       vscode.window.showErrorMessage(
         `${EXTENSION_NAME}: Sorry, something failed when exporting all modules in the current folder.`
       );

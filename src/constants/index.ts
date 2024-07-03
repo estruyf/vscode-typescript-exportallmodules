@@ -1,1 +1,2 @@
-export * from './Extension';
+export * from "./BarrelFiles";
+export * from "./Extension";

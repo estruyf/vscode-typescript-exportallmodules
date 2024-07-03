@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
-import { ExportAll } from "./commands/ExportAll";
-import { FolderListener, ExcludeCommand } from "./commands";
+import { FolderListener, ExcludeCommand, ExportAll } from "./commands";
 import { ExportProvider, ExportFolder } from "./providers";
 import {
   EXTENSION_KEY,
@@ -10,14 +9,6 @@ import {
 } from "./constants";
 import { Logger } from "./helpers/logger";
 
-/**
- * TODO:
- * - add the excluded files & folders to the view
- * - add exclude file command
- * - add exclude folder command
- * - documentation
- * @param context
- */
 export function activate(context: vscode.ExtensionContext) {
   const generate = vscode.commands.registerCommand(
     getCommandName(COMMAND_KEYS.Generate),

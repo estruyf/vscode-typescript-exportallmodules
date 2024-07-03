@@ -1,18 +1,22 @@
-import * as fs from "fs";
-import * as path from "path";
-import { ExportAll } from "../commands";
+import { join } from "path";
+import { fileExists, readFile } from ".";
+import { FileType, Uri, workspace } from "vscode";
+import { BarrelFiles } from "../constants";
 
-export const getFileContents = (filePath: string): string => {
-  if (fs.lstatSync(filePath).isDirectory()) {
-    for (const indexFile of ExportAll.barrelFiles) {
-      const indexPath = path.join(filePath, indexFile);
-      if (fs.existsSync(indexPath)) {
-        return fs.readFileSync(indexPath, "utf8");
+export const getFileContents = async (
+  filePath: string
+): Promise<string | undefined> => {
+  const stat = await workspace.fs.stat(Uri.file(filePath));
+  if (stat.type === FileType.Directory) {
+    for (const indexFile of BarrelFiles) {
+      const indexPath = join(filePath, indexFile);
+      if (await fileExists(indexPath)) {
+        return await readFile(indexPath);
       }
     }
-    return "";
-  } else if (fs.lstatSync(filePath).isFile()) {
-    return fs.readFileSync(filePath, "utf8");
+    return undefined;
+  } else if (stat.type === FileType.File) {
+    return await readFile(filePath);
   }
-  return "";
+  return undefined;
 };
