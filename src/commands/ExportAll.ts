@@ -36,9 +36,7 @@ export class ExportAll {
       } = getConfig();
 
       const folderPath = uri.fsPath;
-      const files = await vscode.workspace.fs.readDirectory(
-        vscode.Uri.parse(folderPath)
-      );
+      const files = await vscode.workspace.fs.readDirectory(uri);
       let filesToExport: FileOrFolderToExport[] = [];
 
       if (files && files.length > 0) {
