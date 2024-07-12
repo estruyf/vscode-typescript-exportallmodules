@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.9.1] 12-07-2024
+
+- [#31](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/31): Fix issue unable to resolve filesystem provider
+
 ## [2.9.0] 03-07-2024
 
 - [#30](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/30): Added the `Barrel Generator: Export all modules from the current file directory` command to generate a barrel file from the current file its directory
