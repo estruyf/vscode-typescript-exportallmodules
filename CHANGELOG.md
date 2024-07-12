@@ -2,7 +2,7 @@
 
 ## [2.9.1] 12-07-2024
 
-- [#31](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/31): Fix issue unable to resolve filesystem provider
+- [#31](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/31): Fix issue unable to resolve filesystem provider (thanks to [Mike Rheault](https://github.com/mrheault))
 
 ## [2.9.0] 03-07-2024
 
