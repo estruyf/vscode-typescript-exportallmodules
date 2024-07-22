@@ -128,7 +128,8 @@ export class ExportAll {
             const filePath = join(uri.fsPath, item.name);
             const fileContents = await getFileContents(filePath);
             const { namedExports, typeExports } = parseFileForNamedExports(
-              fileContents || ""
+              fileContents || "",
+              fileWithoutExtension
             );
 
             const namedExportsStr = namedExports.filter(Boolean).join(", ");

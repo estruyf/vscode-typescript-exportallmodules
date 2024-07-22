@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.10.0] 22-07-2024
+
+- [#1](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/1): Add support for default named exports
+
 ## [2.9.2] 22-07-2024
 
 - [#33](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/33): Fix enum named export

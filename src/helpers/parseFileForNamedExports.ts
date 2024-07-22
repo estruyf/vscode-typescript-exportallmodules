@@ -1,6 +1,17 @@
 import * as typescript from "typescript";
+import { hasExport, isDefaultExport } from ".";
 
-export const parseFileForNamedExports = (fileContents: string) => {
+/**
+ * Parses a TypeScript file for named exports and type exports.
+ *
+ * @param fileContents - The contents of the TypeScript file.
+ * @param filename - The name of the file.
+ * @returns An object containing the named exports and type exports found in the file.
+ */
+export const parseFileForNamedExports = (
+  fileContents: string,
+  filename: string
+) => {
   const namedExports = new Set<string>();
   const typeExports = new Set<string>();
   const sourceFile = typescript.createSourceFile(
@@ -12,16 +23,16 @@ export const parseFileForNamedExports = (fileContents: string) => {
   );
 
   const parseFile = (node: typescript.Node) => {
-    const hasExport = node.modifiers?.some(
-      (m) => m.kind === typescript.SyntaxKind.ExportKeyword
-    );
-
     if (
       (typescript.isTypeAliasDeclaration(node) ||
         typescript.isInterfaceDeclaration(node)) &&
-      hasExport
+      hasExport(node)
     ) {
-      typeExports.add(node.name.getText());
+      if (isDefaultExport(node)) {
+        typeExports.add(`default as ${node.name.getText()}`);
+      } else {
+        typeExports.add(node.name.getText());
+      }
     } else if (
       typescript.isExportDeclaration(node) &&
       node.exportClause &&
@@ -35,27 +46,52 @@ export const parseFileForNamedExports = (fileContents: string) => {
           targetSet.add(element.name.getText());
         }
       });
-    } else if (typescript.isEnumDeclaration(node) && hasExport) {
+    } else if (typescript.isEnumDeclaration(node) && hasExport(node)) {
       namedExports.add(node.name.getText());
-    } else if (typescript.isClassDeclaration(node) && hasExport) {
-      if (node.name) {
-        namedExports.add(node.name.getText());
+    } else if (typescript.isClassDeclaration(node) && hasExport(node)) {
+      const className = node.name?.getText();
+      if (isDefaultExport(node) && className) {
+        namedExports.add(`default as ${className}`);
+      } else if (isDefaultExport(node) && !className) {
+        namedExports.add(`default as ${filename}`);
+      } else if (className) {
+        namedExports.add(className);
       }
     } else if (typescript.isExportAssignment(node)) {
-      namedExports.add(node.expression.getText());
-    } else if (
-      (typescript.isFunctionDeclaration(node) ||
-        typescript.isVariableStatement(node)) &&
-      hasExport
-    ) {
-      const names = typescript.isFunctionDeclaration(node)
-        ? [node.name?.getText()].filter(Boolean)
-        : node.declarationList.declarations.map((d) => d.name.getText());
-      names.forEach((name) => {
-        if (name) {
-          namedExports.add(name);
+      const expression = node.expression.getText();
+
+      if (isDefaultExport(node)) {
+        if (!typescript.isIdentifier(node.expression)) {
+          namedExports.add(`default as ${filename}`);
+        } else {
+          namedExports.add(`default as ${expression}`);
         }
-      });
+      } else {
+        namedExports.add(expression);
+      }
+    } else if (typescript.isFunctionDeclaration(node) && hasExport(node)) {
+      const funcName = node.name?.getText();
+      const isDefault = isDefaultExport(node);
+
+      if (isDefaultExport(node) && funcName) {
+        namedExports.add(`default as ${funcName}`);
+      } else if (isDefaultExport(node) && !funcName) {
+        namedExports.add(`default as ${filename}`);
+      } else if (funcName) {
+        namedExports.add(funcName);
+      }
+    } else if (typescript.isVariableDeclarationList(node)) {
+      const names = node.declarations.map((d) => d.name.getText());
+
+      const parent =
+        node.parent.kind === typescript.SyntaxKind.VariableStatement
+          ? node.parent
+          : null;
+      if (parent && hasExport(parent)) {
+        names.forEach((name) => {
+          namedExports.add(name);
+        });
+      }
     }
 
     typescript.forEachChild(node, parseFile);

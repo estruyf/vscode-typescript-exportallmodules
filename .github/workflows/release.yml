@@ -18,7 +18,10 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Install the dependencies
-        run: npm i
+        run: npm ci
+
+      - name: Test
+        run: npm test
 
       - name: Publish
         run: npx @vscode/vsce publish -p ${{ secrets.VSCE_PAT }}
