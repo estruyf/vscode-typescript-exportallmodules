@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.9.2] 22-07-2024
+
+- [#33](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/33): Fix enum named export
+
 ## [2.9.1] 12-07-2024
 
 - [#31](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/31): Fix issue unable to resolve filesystem provider (thanks to [Mike Rheault](https://github.com/mrheault))
