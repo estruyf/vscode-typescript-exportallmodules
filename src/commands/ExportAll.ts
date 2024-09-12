@@ -128,7 +128,9 @@ export class ExportAll {
 
           let fileSuffix = "";
           if (fileExtension && item.type === "file") {
-            fileSuffix = `.${fileExtension}`;
+            fileSuffix = fileExtension.startsWith(`.`)
+              ? fileExtension
+              : `.${fileExtension}`;
           }
 
           if (namedExports) {
