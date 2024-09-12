@@ -33,6 +33,7 @@ export class ExportAll {
         namedExports,
         quote,
         semis,
+        fileExtension,
       } = getConfig();
 
       const folderPath = uri.fsPath;
@@ -122,8 +123,14 @@ export class ExportAll {
         const output: string[] = [];
 
         for (const item of filesToExport) {
-          const fileWithoutExtension =
+          let fileWithoutExtension =
             item.type === "folder" ? item.name : parse(item.name).name;
+
+          let fileSuffix = "";
+          if (fileExtension && item.type === "file") {
+            fileSuffix = `.${fileExtension}`;
+          }
+
           if (namedExports) {
             const filePath = join(uri.fsPath, item.name);
             const fileContents = await getFileContents(filePath);
@@ -136,19 +143,19 @@ export class ExportAll {
             const typeExportsStr = typeExports.filter(Boolean).join(", ");
             let exportStr = "";
             if (namedExportsStr) {
-              exportStr += `export { ${namedExportsStr} } from ${quote}./${fileWithoutExtension}${quote}${
+              exportStr += `export { ${namedExportsStr} } from ${quote}./${fileWithoutExtension}${fileSuffix}${quote}${
                 semis ? ";" : ""
               }\n`;
             }
             if (typeExportsStr) {
-              exportStr += `export type { ${typeExportsStr} } from ${quote}./${fileWithoutExtension}${quote}${
+              exportStr += `export type { ${typeExportsStr} } from ${quote}./${fileWithoutExtension}${fileSuffix}${quote}${
                 semis ? ";" : ""
               }\n`;
             }
             output.push(exportStr);
           } else {
             output.push(
-              `export * from ${quote}./${fileWithoutExtension}${quote}${
+              `export * from ${quote}./${fileWithoutExtension}${fileSuffix}${quote}${
                 semis ? ";" : ""
               }\n`
             );

@@ -100,10 +100,11 @@ The extension makes use of the following settings:
 | `exportall.config.includeFoldersToExport` | Specifies if folder (which contain a `index.ts` file) will also be included in the module export. | boolean | `true` |
 | `exportall.config.exclude` | Specify which files you want to exclude the `index.ts` file. Works on the whole filename or part of the filename. | string[] | `['.test.', '.spec.']` |
 | `exportall.config.folderListener` | Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder.<br/><br/>To listen to sub-folders, you can include the directory wildcard `**` to the path.  | string[] | `[]` |
-| `exportall.config.relExclusion` | Specify the relative folder/file paths to exclude from the export. | string[] | `[]` |
-| `exportall.config.semis` | Specify if you want to enable/disable the usage of semis in the barrel file. | boolean | `true` |
-| `exportall.config.quote` | Specify the character that you want to use as the quoting character; typically `'` or `"`. | string | `'` |
-| `exportall.config.message` | Specify the message that you want to use in the generated barrel file. The message will be added at the top. | string | |
+| `exportall.config.relExclusion` | Specify the relative folder/file paths to exclude from the export. | `string[]` | `[]` |
+| `exportall.config.semis` | Specify if you want to enable/disable the usage of semis in the barrel file. | `boolean` | `true` |
+| `exportall.config.quote` | Specify the character that you want to use as the quoting character; typically `'` or `"`. | `string` | `'` |
+| `exportall.config.message` | Specify the message that you want to use in the generated barrel file. The message will be added at the top. | `string` | |
+| `exportall.config.exportFileExtension` | Specify the file extension to append to the exported files. Example: `js`, `ts`, `null` (no extension). | `string` \| `null` | `null` |
 
 <p align="center">
   <img src="./assets/config.png" alt="Config settings example" style="display: inline-block" />

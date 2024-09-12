@@ -1,6 +1,7 @@
 import { workspace } from "vscode";
 import {
   CONFIG_EXCLUDE,
+  CONFIG_EXPORT_FILE_EXTENSION,
   CONFIG_INCLUDE_FOLDERS,
   CONFIG_MESSAGE,
   CONFIG_NAMED_EXPORTS,
@@ -24,6 +25,7 @@ export const getConfig = (): Config => {
   const message: string | string[] | undefined = config.get<string | string[]>(
     CONFIG_MESSAGE
   );
+  const fileExtension = config.get<string>(CONFIG_EXPORT_FILE_EXTENSION);
 
   return {
     excludeFiles,
@@ -33,5 +35,6 @@ export const getConfig = (): Config => {
     semis,
     quote,
     message,
+    fileExtension,
   };
 };

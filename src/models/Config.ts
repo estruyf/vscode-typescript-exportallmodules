@@ -6,4 +6,5 @@ export interface Config {
   semis: boolean | undefined;
   quote: '"' | "'";
   message: string | string[] | undefined;
+  fileExtension: string | null | undefined;
 }
