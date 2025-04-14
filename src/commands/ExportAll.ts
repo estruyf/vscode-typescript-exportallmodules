@@ -1,14 +1,10 @@
 import * as vscode from "vscode";
-import {
-  EXTENSION_NAME,
-  EXTENSION_KEY,
-  CONFIG_FOLDERS,
-  BarrelFiles,
-} from "../constants";
+import { EXTENSION_NAME, EXTENSION_KEY, CONFIG_FOLDERS } from "../constants";
 import {
   clearWildcard,
   fileExists,
   getAbsoluteFolderPath,
+  getBarrelFiles,
   getFileContents,
   getRelativeFolderPath,
   parseFileForNamedExports,
@@ -34,8 +30,11 @@ export class ExportAll {
         quote,
         semis,
         fileExtension,
+        barrelName,
+        exportFullPath,
       } = getConfig();
 
+      const BarrelFiles = getBarrelFiles();
       const folderPath = uri.fsPath;
       const files = await vscode.workspace.fs.readDirectory(uri);
       let filesToExport: FileOrFolderToExport[] = [];
@@ -45,6 +44,7 @@ export class ExportAll {
           const absPath = join(folderPath, file);
           let include = false;
           let relPath = file;
+          let crntAbsPath = absPath;
 
           // Include all TS files except for the index
           if (
@@ -66,18 +66,10 @@ export class ExportAll {
                 const indexPath = join(absPath, indexFile);
                 if (await fileExists(indexPath)) {
                   relPath = getRelativeFolderPath(absPath);
+                  crntAbsPath = indexPath;
                   include = true;
                   break;
                 }
-              }
-            }
-          }
-
-          // Check the files that need to be excluded
-          if (excludeFiles && include) {
-            for (const exclude of excludeFiles) {
-              if (file.indexOf(exclude) !== -1 && include) {
-                include = false;
               }
             }
           }
@@ -108,6 +100,8 @@ export class ExportAll {
               );
               filesToExport.push({
                 name: file,
+                relPath: relPath,
+                absPath: crntAbsPath,
                 type:
                   stat.type === vscode.FileType.Directory ? "folder" : "file",
               });
@@ -126,8 +120,17 @@ export class ExportAll {
           let fileWithoutExtension =
             item.type === "folder" ? item.name : parse(item.name).name;
 
+          if (item.type === "folder" && exportFullPath) {
+            fileWithoutExtension = item.absPath.replace(folderPath, "");
+            if (fileWithoutExtension.startsWith("/")) {
+              fileWithoutExtension = fileWithoutExtension.substring(1);
+            }
+            const ext = parse(fileWithoutExtension).ext;
+            fileWithoutExtension = fileWithoutExtension.replace(ext, "");
+          }
+
           let fileSuffix = "";
-          if (fileExtension && item.type === "file") {
+          if (fileExtension && (item.type === "file" || exportFullPath)) {
             fileSuffix = fileExtension.startsWith(`.`)
               ? fileExtension
               : `.${fileExtension}`;
@@ -165,7 +168,7 @@ export class ExportAll {
         }
 
         if (output && output.length > 0) {
-          const filePath = join(uri.fsPath, "index.ts");
+          const filePath = join(uri.fsPath, barrelName || "index.ts");
           if (!(await fileExists(filePath))) {
             await writeFile(filePath, "");
           }

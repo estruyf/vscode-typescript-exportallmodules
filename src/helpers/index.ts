@@ -1,5 +1,6 @@
 export * from "./clearWildcard";
 export * from "./fileExists";
+export * from "./getBarrelFiles";
 export * from "./getConfig";
 export * from "./getFileContents";
 export * from "./hasExport";

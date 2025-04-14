@@ -30,8 +30,8 @@ Example:
 
 ```typescript
 // folder/index.ts
-export * from './foo';
-export * from './bar';
+export * from "./foo";
+export * from "./bar";
 ```
 
 ## ✨ Functionalities
@@ -90,21 +90,33 @@ When you already excluded a folder or file, and want to include these again into
   <img src="./assets/include-export.png" alt="Include to export" style="display: inline-block" />
 </p>
 
+### Customizing the Barrel File Name
+
+By default, the barrel file is named `index.ts`. You can customize this name using the `exportall.config.barrelName` setting in your VS Code settings. For example:
+
+```json
+"exportall.config.barrelName": "barrel.ts"
+```
+
+This will generate a barrel file with the specified name instead of index.ts.
+
 ## ⚙️ Configuration / Settings
 
 The extension makes use of the following settings:
 
-| Setting | Description | Type | Default |
-| --- | --- | --- | --- |
-| `exportall.config.namedExports` | Specifies if you want to use named exports in the barrel file. | boolean | `false` |
-| `exportall.config.includeFoldersToExport` | Specifies if folder (which contain a `index.ts` file) will also be included in the module export. | boolean | `true` |
-| `exportall.config.exclude` | Specify which files you want to exclude the `index.ts` file. Works on the whole filename or part of the filename. | string[] | `['.test.', '.spec.']` |
-| `exportall.config.folderListener` | Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder.<br/><br/>To listen to sub-folders, you can include the directory wildcard `**` to the path.  | string[] | `[]` |
-| `exportall.config.relExclusion` | Specify the relative folder/file paths to exclude from the export. | `string[]` | `[]` |
-| `exportall.config.semis` | Specify if you want to enable/disable the usage of semis in the barrel file. | `boolean` | `true` |
-| `exportall.config.quote` | Specify the character that you want to use as the quoting character; typically `'` or `"`. | `string` | `'` |
-| `exportall.config.message` | Specify the message that you want to use in the generated barrel file. The message will be added at the top. | `string` | |
-| `exportall.config.exportFileExtension` | Specify the file extension to append to the exported files. Example: `js`, `ts`, `null` (no extension). | `string` \| `null` | `null` |
+| Setting                                   | Description                                                                                                                                                                                                                                                                                 | Type               | Default                |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ---------------------- |
+| `exportall.config.namedExports`           | Specifies if you want to use named exports in the barrel file.                                                                                                                                                                                                                              | boolean            | `false`                |
+| `exportall.config.includeFoldersToExport` | Specifies if folder (which contain a `index.ts` file) will also be included in the module export.                                                                                                                                                                                           | boolean            | `true`                 |
+| `exportall.config.exclude`                | Specify which files you want to exclude the `index.ts` file. Works on the whole filename or part of the filename.                                                                                                                                                                           | string[]           | `['.test.', '.spec.']` |
+| `exportall.config.folderListener`         | Specify the relative paths for the folder listeners. This will make it possible to automatically generate the module export once a file gets added/updated/removed within the specified folder.<br/><br/>To listen to sub-folders, you can include the directory wildcard `**` to the path. | string[]           | `[]`                   |
+| `exportall.config.relExclusion`           | Specify the relative folder/file paths to exclude from the export.                                                                                                                                                                                                                          | `string[]`         | `[]`                   |
+| `exportall.config.semis`                  | Specify if you want to enable/disable the usage of semis in the barrel file.                                                                                                                                                                                                                | `boolean`          | `true`                 |
+| `exportall.config.quote`                  | Specify the character that you want to use as the quoting character; typically `'` or `"`.                                                                                                                                                                                                  | `string`           | `'`                    |
+| `exportall.config.message`                | Specify the message that you want to use in the generated barrel file. The message will be added at the top.                                                                                                                                                                                | `string`           |                        |
+| `exportall.config.exportFileExtension`    | Specify the file extension to append to the exported files. Example: `js`, `ts`, `null` (no extension).                                                                                                                                                                                     | `string` \| `null` | `null`                 |
+| `exportall.config.barrelName`             | Specify the name of the barrel file.                                                                                                                                                                                                                                                        | `string`           | `index.ts`             |
+| `exportall.config.exportFullPath`         | Specify if you want to use the full path in the export statement. This will be applied to the generated barrel file.                                                                                                                                                                        | `boolean`          | `false`                |
 
 <p align="center">
   <img src="./assets/config.png" alt="Config settings example" style="display: inline-block" />
@@ -128,5 +140,23 @@ Experiencing any issues, or got feedback to share? Feel free to raise this in th
 <br />
 
 <p align="center">
-  <a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Festruyf%2Fvscode-typescript-exportallmodules"><img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Festruyf%2Fvscode-typescript-exportallmodules&countColor=%23263759" /></a>
+  <a href="https://github.com/sponsors/estruyf" title="Sponsor Elio Struyf" target="_blank">
+    <img src="https://img.shields.io/badge/Sponsor-Elio%20Struyf%20%E2%9D%A4-%23fe8e86?logo=GitHub&style=flat-square" height="25px" alt="Sponsor @estruyf" />
+  </a>
+</p>
+
+<br />
+
+<p align="center">
+  <a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Festruyf%2Fvscode-typescript-exportallmodules">
+    <img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Festruyf%2Fvscode-typescript-exportallmodules&countColor=%23263759" />
+  </a>
+</p>
+
+<br />
+
+<p align="center">
+  <a href="https://struyfconsulting.com" title="Hire Elio Struyf via Struyf Consulting" target="_blank">
+    <img src="./assets/struyf-consulting.webp" height="25px" alt="Struyf Consulting Logo" />
+  </a>
 </p>

@@ -7,4 +7,6 @@ export interface Config {
   quote: '"' | "'";
   message: string | string[] | undefined;
   fileExtension: string | null | undefined;
+  barrelName: string | null | undefined;
+  exportFullPath: boolean | undefined;
 }

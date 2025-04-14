@@ -1,7 +1,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import { ExportAll } from ".";
-import { EXTENSION_KEY, CONFIG_FOLDERS } from "../constants";
+import {
+  EXTENSION_KEY,
+  CONFIG_FOLDERS,
+  CONFIG_BARREL_NAME,
+} from "../constants";
 import { ExportFolder } from "../providers";
 import {
   getRelativeFolderPath,
@@ -9,7 +13,7 @@ import {
   parseWinPath,
   clearWildcard,
 } from "../helpers";
-import { Uri } from "vscode";
+import { Uri, workspace } from "vscode";
 
 export class FolderListener {
   private static watchers: { [path: string]: vscode.FileSystemWatcher } = {};
@@ -123,6 +127,8 @@ export class FolderListener {
    * @param uri
    */
   private static isIndexFile(uri: vscode.Uri) {
-    return uri.fsPath.toLowerCase().endsWith("index.ts");
+    const config = workspace.getConfiguration(EXTENSION_KEY);
+    const barrelName = config.get<string>(CONFIG_BARREL_NAME);
+    return uri.fsPath.toLowerCase().endsWith(barrelName || "index.ts");
   }
 }

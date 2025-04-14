@@ -1,7 +1,9 @@
 import { workspace } from "vscode";
 import {
+  CONFIG_BARREL_NAME,
   CONFIG_EXCLUDE,
   CONFIG_EXPORT_FILE_EXTENSION,
+  CONFIG_EXPORT_FULL_PATH,
   CONFIG_INCLUDE_FOLDERS,
   CONFIG_MESSAGE,
   CONFIG_NAMED_EXPORTS,
@@ -26,6 +28,8 @@ export const getConfig = (): Config => {
     CONFIG_MESSAGE
   );
   const fileExtension = config.get<string>(CONFIG_EXPORT_FILE_EXTENSION);
+  const barrelName = config.get<string>(CONFIG_BARREL_NAME);
+  const exportFullPath = config.get<boolean>(CONFIG_EXPORT_FULL_PATH);
 
   return {
     excludeFiles,
@@ -36,5 +40,7 @@ export const getConfig = (): Config => {
     quote,
     message,
     fileExtension,
+    barrelName,
+    exportFullPath,
   };
 };

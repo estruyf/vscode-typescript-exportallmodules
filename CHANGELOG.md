@@ -1,5 +1,10 @@
 # Change Log
 
+## [2.12.0] 14-04-2025
+
+- [#36](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/36): Added the `exportall.config.exportFullPath` setting to allow exporting the full path of the folder including the barrel file name
+- [#35](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/35): Added the `exportall.config.barrelName` setting to define the barrel file name
+
 ## [2.11.0] 12-09-2024
 
 - [#11](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/11): Add the option to define the file extension for the files to export
@@ -60,7 +65,7 @@
 
 - [#4](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/4): Fix file and folder parsing on Windows
 - [#8](https://github.com/estruyf/vscode-typescript-exportallmodules/pull/8): Exporting folders that contain a `index.tsx` file. Thanks to [
-Robin Blomberg](https://github.com/RobinBlomberg).
+  Robin Blomberg](https://github.com/RobinBlomberg).
 - [#9](https://github.com/estruyf/vscode-typescript-exportallmodules/pull/9): Ability to specify which type of quotes to use when exporting. Thanks to [rveldpaus](https://github.com/rveldpaus).
 
 ## [2.2.0] 11-06-2021

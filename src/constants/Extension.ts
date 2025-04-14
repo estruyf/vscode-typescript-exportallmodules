@@ -8,6 +8,8 @@ export const CONFIG_QUOTE = "config.quote";
 export const CONFIG_MESSAGE = "config.message";
 export const CONFIG_NAMED_EXPORTS = "config.namedExports";
 export const CONFIG_EXPORT_FILE_EXTENSION = "config.exportFileExtension";
+export const CONFIG_BARREL_NAME = "config.barrelName";
+export const CONFIG_EXPORT_FULL_PATH = "config.exportFullPath";
 
 export const EXTENSION_NAME = "Barrel Generator";
 
