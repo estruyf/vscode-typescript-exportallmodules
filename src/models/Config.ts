@@ -9,4 +9,5 @@ export interface Config {
   fileExtension: string | null | undefined;
   barrelName: string | null | undefined;
   exportFullPath: boolean | undefined;
+  recursive: boolean | undefined;
 }
