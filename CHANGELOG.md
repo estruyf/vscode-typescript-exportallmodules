@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.13.0] 06-07-2025
+
+- [#37](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/37: Recursive searching of folder to export all modules
+
 ## [2.12.0] 14-04-2025
 
 - [#36](https://github.com/estruyf/vscode-typescript-exportallmodules/issues/36): Added the `exportall.config.exportFullPath` setting to allow exporting the full path of the folder including the barrel file name
