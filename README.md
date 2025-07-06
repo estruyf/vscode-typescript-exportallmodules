@@ -100,6 +100,34 @@ By default, the barrel file is named `index.ts`. You can customize this name usi
 
 This will generate a barrel file with the specified name instead of index.ts.
 
+### Recursive Folder Search
+
+You can enable recursive searching of subdirectories for TypeScript files using the `exportall.config.recursive` setting. This is useful when you have a folder structure like:
+
+```
+components/
+  button/
+    button.tsx
+    button.module.scss
+  textBox/
+    textBox.tsx
+    textBox.module.scss
+```
+
+To export TypeScript files from all subdirectories without requiring index files in each subfolder:
+
+```json
+"exportall.config.recursive": true
+```
+
+When enabled, running the export command on the `components` folder will create:
+
+```typescript
+// components/index.ts
+export * from './button/button';
+export * from './textBox/textBox';
+```
+
 ## ⚙️ Configuration / Settings
 
 The extension makes use of the following settings:
@@ -117,6 +145,7 @@ The extension makes use of the following settings:
 | `exportall.config.exportFileExtension`    | Specify the file extension to append to the exported files. Example: `js`, `ts`, `null` (no extension).                                                                                                                                                                                     | `string` \| `null` | `null`                 |
 | `exportall.config.barrelName`             | Specify the name of the barrel file.                                                                                                                                                                                                                                                        | `string`           | `index.ts`             |
 | `exportall.config.exportFullPath`         | Specify if you want to use the full path in the export statement. This will be applied to the generated barrel file.                                                                                                                                                                        | `boolean`          | `false`                |
+| `exportall.config.recursive`              | Specify if you want to recursively search subdirectories for TypeScript files to export. When enabled, all TypeScript files in subdirectories will be included without requiring index files in each subfolder.                                                                           | `boolean`          | `false`                |
 
 <p align="center">
   <img src="./assets/config.png" alt="Config settings example" style="display: inline-block" />

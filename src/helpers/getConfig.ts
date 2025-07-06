@@ -8,6 +8,7 @@ import {
   CONFIG_MESSAGE,
   CONFIG_NAMED_EXPORTS,
   CONFIG_QUOTE,
+  CONFIG_RECURSIVE,
   CONFIG_RELATIVE_EXCLUDE,
   CONFIG_SEMIS,
   EXTENSION_KEY,
@@ -30,6 +31,7 @@ export const getConfig = (): Config => {
   const fileExtension = config.get<string>(CONFIG_EXPORT_FILE_EXTENSION);
   const barrelName = config.get<string>(CONFIG_BARREL_NAME);
   const exportFullPath = config.get<boolean>(CONFIG_EXPORT_FULL_PATH);
+  const recursive = config.get<boolean>(CONFIG_RECURSIVE);
 
   return {
     excludeFiles,
@@ -42,5 +44,6 @@ export const getConfig = (): Config => {
     fileExtension,
     barrelName,
     exportFullPath,
+    recursive,
   };
 };

@@ -221,6 +221,11 @@
             "default": false,
             "description": "Specify if you want to use the full path in the export statement. This will be applied to the generated barrel file."
           },
+          "exportall.config.recursive": {
+            "type": "boolean",
+            "default": false,
+            "description": "Specify if you want to recursively search subdirectories for TypeScript files to export."
+          },
           "exportall.config.exportFileExtension": {
             "type": [
               "string",
