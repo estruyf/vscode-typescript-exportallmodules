@@ -162,6 +162,11 @@ export class ExportAll {
               ? fileExtension
               : `.${fileExtension}`;
           }
+          if (fileExtension && item.type === "folder") {
+            fileSuffix = fileExtension.startsWith(`.`)
+              ? `/index${fileExtension}`
+              : `/index.${fileExtension}`;
+          }
 
           if (namedExports) {
             const filePath = item.absPath;
